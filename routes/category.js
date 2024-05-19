@@ -11,4 +11,7 @@ router.post('/add-category', categoryController.addCategory);
 // * Route endpoint to delete category based on ID
 router.delete('/delete-category/:categoryId', categoryController.deleteCategory);
 
+// * Route endpoint to update category based on ID
+router.put('/update-category', categoryController.updateCategory);
+
 module.exports = router;

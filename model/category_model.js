@@ -30,8 +30,45 @@ async function deleteCategory(categoryId){
     await pool.query(query, values);
 };
 
+// * Update category based on ID 
+async function updateCategory(categoryId, categoryPic, categoryName){
+    let query = `UPDATE category SET`;
+
+    const values = [];
+    let valueIndex = 1;
+    let fieldsToUpdate = 0;
+
+    if (categoryPic !== undefined){
+        query += ` category_pic = $${valueIndex}`;
+        values.push(categoryPic);
+        valueIndex++;
+        fieldsToUpdate++;
+    }
+
+    if (categoryName !== undefined){
+        if (fieldsToUpdate > 0){
+            query += ',';
+        }
+
+        query += ` category_name = $${valueIndex}`;
+        values.push(categoryName);
+        valueIndex++;
+        fieldsToUpdate++;
+    }
+
+    if (fieldsToUpdate > 0){
+        query += ` WHERE category_id = $${valueIndex}`;
+        values.push(categoryId);
+
+        await pool.query(query, values);
+    } else {
+        throw new Error('No fields to update');
+    }
+};
+
 module.exports = {
     getAllCategories,
     addCategory,
     deleteCategory,
+    updateCategory,
 };
