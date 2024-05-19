@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mitra Surya Jaya API Documentation</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>Mitra Surya Jaya</h1>
+        <button id="drawerToggle" class="drawer-toggle">☰</button>
+    </header>
+    <nav id="drawer" class="drawer">
+        <ul>
+            <li><a href="#get-users">GET /api/users</a></li>
+            <li><a href="#post-users">POST /api/users</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="endpoints">
+            <p>API untuk mengambil seluruh data yang ada pada database untuk keperluan Mitra Surya Jaya</p>
+            <h2>Endpoint</h2>
+            <a href="http://localhost:3000">http://localhost:3000<br></a>
+            <br>
+            <div class="endpoint" id="get-users">
+                <h3>Get All Categories</h3>
+                <p>Retrieve a list of categories.</p>
+                <button onclick="toggleDetails('details-users')">Show Details</button>
+                <div id="details-users" class="details" style="display: none;">
+                    <h4>Request</h4>
+                    <pre><code>GET /category</code></pre>
+                    <h4>Response</h4>
+                    <pre><code>
+{
+    "success": true,
+    "categories": [
+        {
+            "category_id": 1,
+            "category_pic": "https://images.tokopedia.net/img/cache/700/VqbcmM/2022/10/27/38ba55f4-d1d8-4349-bed4-28febd19b5ef.jpg",
+            "category_name": "Makanan Ringan"
+        },
+        {
+            "category_id": 2,
+            "category_pic": "https://static.republika.co.id/uploads/images/inpicture_slide/060445800-1677566709-830-556.jpg",
+            "category_name": "Minuman"
+        },
+    ],
+}
+                    </code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint" id="post-users">
+                <h3>POST /api/users</h3>
+                <p>Create a new user.</p>
+                <button onclick="toggleDetails('details-create-user')">Show Details</button>
+                <div id="details-create-user" class="details" style="display: none;">
+                    <h4>Request</h4>
+                    <pre><code>POST /api/users
+Content-Type: application/json
+
+{
+  "name": "New User"
+}</code></pre>
+                    <h4>Response</h4>
+                    <pre><code>
+{
+  "id": 3,
+  "name": "New User"
+}
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="/js/script.js"></script>
+</body>
+
+</html>

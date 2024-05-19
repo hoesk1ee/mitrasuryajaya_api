@@ -1,0 +1,103 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #0073e6;
+    color: white;
+    padding: 1em;
+    text-align: center;
+    position: relative;
+}
+
+header .drawer-toggle {
+    position: absolute;
+    top: 1em;
+    left: 1em;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+nav.drawer {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #333;
+    color: white;
+    overflow-y: auto;
+    transition: left 0.3s;
+    padding-top: 2em;
+}
+
+nav.drawer ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav.drawer li {
+    padding: 1em;
+}
+
+nav.drawer li a {
+    color: white;
+    text-decoration: none;
+}
+
+nav.drawer li a:hover {
+    text-decoration: underline;
+}
+
+nav.drawer.open {
+    left: 0;
+}
+
+main {
+    padding: 2em;
+    padding-left: 260px; /* Space for the drawer */
+    transition: padding-left 0.3s;
+}
+
+.endpoint {
+    margin-bottom: 1.5em;
+    border: 1px solid #ddd;
+    padding: 1em;
+    border-radius: 5px;
+}
+
+.endpoint h3 {
+    margin: 0;
+}
+
+.endpoint button {
+    margin-top: 0.5em;
+    padding: 0.5em 1em;
+    background-color: #0073e6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.endpoint button:hover {
+    background-color: #005bb5;
+}
+
+.details {
+    margin-top: 1em;
+    padding: 1em;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+pre {
+    background-color: #eee;
+    padding: 1em;
+    border-radius: 5px;
+}
