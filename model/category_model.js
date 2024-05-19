@@ -2,7 +2,7 @@ const pool = require('../db/index');
 
 // * Read all categories
 async function getAllCategories(){
-    const query = 'SELECT * FROM category';
+    const query = `SELECT * FROM category`;
     const result = await pool.query(query);
 
     return result.rows;
@@ -55,6 +55,9 @@ async function updateCategory(categoryId, categoryPic, categoryName){
         valueIndex++;
         fieldsToUpdate++;
     }
+    // UPDATE category SET category_pic = $1, category_name = $2 WHERE category_id = $3
+    // UPDATE category SET category_name = $1 WHERE category_id = $2;
+    // UPDATE category SET category_pic = $1 WHERE category_id = $2;
 
     if (fieldsToUpdate > 0){
         query += ` WHERE category_id = $${valueIndex}`;

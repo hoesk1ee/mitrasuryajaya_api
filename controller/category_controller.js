@@ -5,7 +5,12 @@ async function getAllCategories(req, res){
     try{
         const categories = await categoryModel.getAllCategories();
 
-        res.json({success : true, categories : categories});
+        res.json(
+            {
+                success : true,
+                categories : categories
+            }
+        );
     } catch(e) {
         console.error('Error fetching categories data : ', e);
         res.status(500).json({success: false, error : "Internal Server Error : ", e});
