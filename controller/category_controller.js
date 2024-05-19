@@ -40,8 +40,23 @@ async function deleteCategory(req, res){
     }
 };
 
+// * Controller to update category name and/or pic
+async function updateCategory(req, res){
+    try {
+        const { categoryId, categoryPic, categoryName} = req.body;
+
+        await categoryModel.updateCategory(categoryId, categoryPic, categoryName);
+
+        res.status(201).json({ success : true, message: "Category has been updated!"});
+    } catch(e){
+        console.error("Error while updating category : ", e);
+        res.status(500).json({ success : false, message: `${e}`});
+    }
+};
+
 module.exports = {
     getAllCategories,
     addCategory,
     deleteCategory,
+    updateCategory,
 };
