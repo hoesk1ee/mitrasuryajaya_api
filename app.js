@@ -22,4 +22,8 @@ const categoryRoute = require('./routes/category');
 
 app.use('/category', categoryRoute);
 
+// * route customer
+const customerRoute = require('./routes/customer');
+app.use('/customer', customerRoute);
+
 module.exports = app;
