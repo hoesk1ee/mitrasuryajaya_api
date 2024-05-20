@@ -36,4 +36,5 @@ async function updateUserVerification(userId){
 module.exports = {
     getUserById,
     createUser,
+    updateUserVerification,
 };

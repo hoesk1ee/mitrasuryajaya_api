@@ -18,14 +18,14 @@ async function getUserById(req, res){
             message : "Failed to retrieve user data : ", e,
         });
     }
-}
+};
 
 // * Controller to receive req from frontend to add new user
 async function createUser(req, res){
     const { userId, photoUrl, userRole, userName, phoneNumber, email, isVerified } = req.body;
 
     try {
-        const newUser = await userModel.createUser(userId, photoUrl, userRole, userName, phoneNumber, email, isVerified);
+        await userModel.createUser(userId, photoUrl, userRole, userName, phoneNumber, email, isVerified);
 
         res.json({
             success : true,
@@ -38,9 +38,30 @@ async function createUser(req, res){
             message : `Failed to create new user : ${e}`,
         });
     }
-}
+};
+
+// * Controller to receive userId to update verification status
+async function updateUserVerification(req, res){
+    const { userId } = req.params;
+
+   try{
+        await userModel.updateUserVerification(userId);
+
+        res.json({
+            success : true,
+            message : "User has been verified!",
+        });
+    } catch(e) {
+        console.error("Failed to verif user : ", e);
+        res.status(500).json({
+            success : false,
+            message : `Failed to verif current user : ${e}`,
+        });
+   }
+};
 
 module.exports = {
     getUserById,
     createUser,
+    updateUserVerification
 };
