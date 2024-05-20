@@ -5,4 +5,7 @@ const router = express.Router();
 // * Route endpoint to retrieve user data based on ID
 router.get('/:userId', userController.getUserById);
 
+// * Route endpoint to create new user
+router.get('/create-user', userController.createUser);
+
 module.exports = router;
