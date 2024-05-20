@@ -11,6 +11,20 @@ async function getUserById(userId){
     return result.rows;
 }
 
+// * Create new user
+async function createUser(userId, photoUrl, userRole, userName, phoneNumber, email, isVerified){
+    const query = `
+    INSERT INTO users(user_id, photo_url, user_role, user_name, phone_number, email, is_verified)
+    VALUES
+    ($1, $2, $3, $4, $5, $6, $7)
+    `
+
+    const values = [userId, photoUrl, userRole, userName, phoneNumber, email, isVerified];
+
+    await pool.query(query, values);
+}
+
 module.exports = {
     getUserById,
+    createUser,
 };
