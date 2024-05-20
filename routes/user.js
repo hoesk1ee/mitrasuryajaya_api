@@ -6,6 +6,6 @@ const router = express.Router();
 router.get('/:userId', userController.getUserById);
 
 // * Route endpoint to create new user
-router.get('/create-user', userController.createUser);
+router.post('/create-user', userController.createUser);
 
 module.exports = router;
