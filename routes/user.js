@@ -8,4 +8,7 @@ router.get('/:userId', userController.getUserById);
 // * Route endpoint to create new user
 router.post('/create-user', userController.createUser);
 
+// * Route endpoint to update verification status of user
+router.put('/update-user-verification/:userId', userController.updateUserVerification);
+
 module.exports = router;
