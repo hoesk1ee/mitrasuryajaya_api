@@ -8,7 +8,7 @@ async function getUserById(userId){
 
     const result = await pool.query(query, values);
 
-    return result.rows;
+    return result.rows[0];
 }
 
 // * Create new user
