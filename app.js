@@ -24,4 +24,8 @@ const userRoute = require('./routes/user');
 app.use('/category', categoryRoute);
 app.use('/user', userRoute);
 
+// * route customer
+const customerRoute = require('./routes/customer');
+app.use('/customer', customerRoute);
+
 module.exports = app;
