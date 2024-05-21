@@ -19,7 +19,9 @@ app.get('/', (req, res) => {
 
 // * Define all route here
 const categoryRoute = require('./routes/category');
+const userRoute = require('./routes/user');
 
 app.use('/category', categoryRoute);
+app.use('/user', userRoute);
 
 module.exports = app;
