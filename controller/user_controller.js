@@ -43,14 +43,21 @@ async function createUser(req, res){
 // * Controller to receive userId to update verification status
 async function updateUserVerification(req, res){
     const { userId } = req.params;
-
+    
    try{
-        await userModel.updateUserVerification(userId);
-
-        res.json({
-            success : true,
-            message : "User has been verified!",
-        });
+        const result = await userModel.updateUserVerification(userId);
+        
+        if(result){
+            res.json({
+                success : false,
+                message : "User already verified!"
+            });
+        } else {
+            res.json({
+                success : true,
+                message : "User has been verified!",
+            });
+        }
     } catch(e) {
         console.error("Failed to verif user : ", e);
         res.status(500).json({

@@ -26,11 +26,19 @@ async function createUser(userId, photoUrl, userRole, userName, phoneNumber, ema
 
 // * Update user verification
 async function updateUserVerification(userId){
-    const query = `UPDATE users SET is_verified = true WHERE user_id = $1`;
+    const updateVerifStatus = `UPDATE users SET is_verified = true WHERE user_id = $1`;
+    const checkVerifStatus = `SELECT is_verified from users WHERE user_id = $1`;
 
     const values = [userId];
+  
+    const result = await pool.query(checkVerifStatus, values);
 
-    await pool.query(query, values);
+    if(result.rows[0].is_verified) {
+        return true
+    } else {
+        await pool.query(updateVerifStatus, values);
+        return false
+    }
 }
 
 module.exports = {
