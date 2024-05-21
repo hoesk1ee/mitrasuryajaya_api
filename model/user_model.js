@@ -11,6 +11,15 @@ async function getUserById(userId){
     return result.rows[0];
 }
 
+// * Read all user for data purpose.
+async function getAllUser(){
+    const query = `SELECT * FROM users`;
+
+    const result = await pool.query(query);
+
+    return result.rows;
+}
+
 // * Create new user
 async function createUser(userId, photoUrl, userRole, userName, phoneNumber, email, isVerified){
     const query = `
@@ -43,6 +52,7 @@ async function updateUserVerification(userId){
 
 module.exports = {
     getUserById,
+    getAllUser,
     createUser,
     updateUserVerification,
 };

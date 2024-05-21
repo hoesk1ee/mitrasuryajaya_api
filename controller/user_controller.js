@@ -20,6 +20,24 @@ async function getUserById(req, res){
     }
 };
 
+// * Controller to get all user and send resp to frontend
+async function getAllUser(req, res){
+    try {
+        const users = await userModel.getAllUser();
+
+        res.json({
+            success : true, 
+            users : users,
+        });
+    } catch(e){
+        console.error("Failed to retrieve user data : ", e);
+        res.status(500).json({
+            success : false,
+            message : `Failed to retreive user data : ${3}`,
+        });
+    }
+}
+
 // * Controller to receive req from frontend to add new user
 async function createUser(req, res){
     const { userId, photoUrl, userRole, userName, phoneNumber, email, isVerified } = req.body;
@@ -69,6 +87,7 @@ async function updateUserVerification(req, res){
 
 module.exports = {
     getUserById,
+    getAllUser,
     createUser,
     updateUserVerification
 };
