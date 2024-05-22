@@ -6,11 +6,19 @@ async function getAllProduct(req, res){
         const { categoryId } = req.params;
 
         const products = await productModel.getAllProduct(categoryId);
-
-        res.json({
-            success : true,
-            products : products
-        });
+        
+        if( products.length == 0 ){
+            res.json({
+                success : true,
+                message : "No Product in this category"
+            });
+        }else{
+            res.json({
+                success : true,
+                products : products
+            });
+        }
+        
     } catch(e){
         console.error('Error fetching products data : ', e);
         res.status(500).json({ success: false, error : "Internal Server Error", e});
