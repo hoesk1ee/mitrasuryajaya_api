@@ -11,7 +11,7 @@ async function getAllProductDetail(req,res){
         if(productDetails.length == 0){
             res.json({
                 success : true,
-                message : "No product varian"
+                message : "No product variant"
             })
         }else{
             res.json({
@@ -19,11 +19,14 @@ async function getAllProductDetail(req,res){
                 product_id : productDetails[0].product_id,
                 product_pic : productDetails[0].product_pic,
                 product_name : productDetails[0].product_name,
-                productDetails : productDetails.map(({product_detail_id, product_detail_pic, product_detail_name, price})=>({product_detail_id, product_detail_pic, product_detail_name, price}))     
+                productDetails : productDetails.map(
+                    ({product_detail_id, product_detail_pic, product_detail_name, price})=>
+                        ({product_detail_id, product_detail_pic, product_detail_name, price}
+                    ))     
             })
         }
     } catch(e){
-        console.error('Fetching All product detail data : ', e);
+        console.error('Error while fetching product detail data : ', e);
         res.status(500).json({ success : false, message : "Internal server Error", e});
     }
 };
@@ -35,9 +38,9 @@ async function addProductDetail(req,res){
 
         await productDetailModel.addProductDetail(productId, productDetailPic, productDetailName, price);
 
-        res.status(201).json({ success : true, message : "New Product Varian has been added!"});
+        res.status(201).json({ success : true, message : "New Product variant has been added!"});
     } catch(e){
-        console.error("Error while adding new product varian : ", e);
+        console.error("Error while adding new product variant : ", e);
         res.status(500).json({ success : false, message : `${e}`});
     }
 };
@@ -49,7 +52,7 @@ async function deleteProductDetail(req,res){
 
         await productDetailModel.deleteProductDetail(productId, productDetailId);
 
-        res.status(201).json({success : true, message : "Product varian has been deleted!"});
+        res.status(201).json({success : true, message : "Product variant has been deleted!"});
     } catch(e){
         console.error("Error while deleting product detail : ", e);
         res.status(500).json({success : false, message : `${e}`});
@@ -63,7 +66,7 @@ async function updateProductDetail(req,res){
 
         await productDetailModel.updateProductDetail(productId, productDetailId, productDetailPic, productDetailName, price);
 
-        res.status(201).json({success : true, message : "Product Varian has been updated!"});
+        res.status(201).json({success : true, message : "Product variant has been updated!"});
     } catch(e){
         console.error("Error while updating product detail : ", e);
         res.status(500).json( {success : false, message : `${e}`, e});
