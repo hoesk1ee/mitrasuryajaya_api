@@ -5,4 +5,7 @@ const router = express.Router();
 // * Router endpoint to fetch all product expired based on product_detail_id
 router.get('/:productDetailId', productExpController.getAllProductExp);
 
+// * Router endpoint to add new product expired
+router.post('/add-product-exp', productExpController.addProductExp);
+
 module.exports = router;
