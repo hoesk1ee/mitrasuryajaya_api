@@ -47,8 +47,23 @@ async function addProductExp(req,res){
     }
 };
 
+// * Controller to delete product expired based on product_exp_id and product_detail_id
+async function deleteProductExp(req,res){
+    try{
+        const { quantity, productExpId, transactionType, note } = req.body;
+
+        await productExpModel.deleteProductExp(quantity, productExpId, transactionType, note);
+
+        res.status(201).json({ success : true, message : "Product expired has been deleted!"});
+    } catch(e){
+        console.error("Error while deleting product expired : ", e);
+        res.status(500).json({ success : false, messagge : `${e}`});
+    }
+};
+
 module.exports = {
     getAllProductExp,
-    addProductExp
+    addProductExp,
+    deleteProductExp
 };
 
