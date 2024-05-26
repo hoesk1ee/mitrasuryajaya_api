@@ -33,7 +33,22 @@ async function getAllProductExp(req,res){
     }
 };
 
+// * Controller to add new product exp
+async function addProductExp(req,res){
+    try{
+        const { productDetailId, expDate, quantity, productBarcode } = req.body;
+
+        await productExpModel.addProductExp(productDetailId, expDate, quantity, productBarcode);
+
+        res.status(201).json({ success : true, message : "New product expired has been added!" });
+    } catch(e){
+        console.error("Error while adding product expired : ", e);
+        res.status(500).json({ success : false, message : `${e}`});
+    }
+};
+
 module.exports = {
-    getAllProductExp
+    getAllProductExp,
+    addProductExp
 };
 
