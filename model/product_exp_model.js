@@ -15,6 +15,19 @@ async function getAllProductExp(productDetailId){
     return result.rows;
 };
 
+// * Add product expired
+async function addProductExp(productDetailId, expDate, quantity, productBarcode){
+    const query = `
+        INSERT INTO product_exp(product_detail_id, exp_date, quantity, product_barcode)
+        VALUES ($1, $2, $3, $4)
+    `;
+
+    const values = [ productDetailId, expDate, quantity, productBarcode ];
+
+    await pool.query(query, values);
+};
+
 module.exports = {
-    getAllProductExp
+    getAllProductExp,
+    addProductExp
 };
