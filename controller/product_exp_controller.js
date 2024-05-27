@@ -47,7 +47,7 @@ async function addProductExp(req,res){
     }
 };
 
-// * Controller to delete product expired based on product_exp_id and product_detail_id
+// * Controller to delete product expired based on product_exp_id
 async function deleteProductExp(req,res){
     try{
         const { quantity, productExpId, transactionType, note } = req.body;
@@ -61,9 +61,24 @@ async function deleteProductExp(req,res){
     }
 };
 
+// * Controller to update product expired based on product_exp_id
+async function updateProductExp(req,res){
+    try{
+        const { quantity, productExpId, transactionType, note } = req.body;
+
+        await productExpModel.updateProductExp(quantity, productExpId, transactionType, note);
+
+        res.status(201).json({ success: true, message : "Stock has been added"});
+    }catch(e){
+        console.error("Error while updating stock in product expired : ", e);
+        res.status(500).json({ success : false, message :`${e}`});
+    }
+};
+
 module.exports = {
     getAllProductExp,
     addProductExp,
-    deleteProductExp
+    deleteProductExp,
+    updateProductExp
 };
 

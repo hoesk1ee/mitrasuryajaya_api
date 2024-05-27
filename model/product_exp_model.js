@@ -27,7 +27,7 @@ async function addProductExp(productDetailId, expDate, quantity, productBarcode)
     await pool.query(query, values);
 };
 
-// * Delete product expired based on product_detail_id and product_exp_id
+// * Delete product expired based on product_exp_id
 async function deleteProductExp(quantity, productExpId, transactionType, note){
     try{
         // * Begin transaction
@@ -68,8 +68,49 @@ async function deleteProductExp(quantity, productExpId, transactionType, note){
     }
 };
 
+// * Update product expired based on product_exp_id
+async function updateProductExp(quantity, productExpId, transactionType, note){
+    try{
+        // * Begin Transaction
+        await pool.query('BEGIN');
+        
+        // * Update to add stock in product_exp
+        const queryUpdate = `
+            UPDATE product_exp SET quantity = quantity + $1
+            WHERE product_exp_id = $2
+        `;
+
+        const valuesUpdate = [quantity, productExpId];
+
+        const result = await pool.query(queryUpdate, valuesUpdate);
+
+        // * Check if update was success
+        if(result.rowCount === 0){
+            throw new Error('Update failed');
+        }
+
+        // * After update success, insert into product_transaction
+        const queryInsert = `
+            INSERT INTO product_transaction(product_exp_id, transaction_type, quantity, note)
+            VALUES ($1, $2, $3, $4)
+        `;
+
+        const valuesInsert = [productExpId, transactionType, quantity, note];
+
+        await pool.query(queryInsert, valuesInsert);
+
+        // * Commit transaction
+        await pool.query('COMMIT');
+    }catch(e){
+        // * Rollback transaction if error
+        await pool.query('ROLLBACK');
+        throw e;
+    }
+};
+
 module.exports = {
     getAllProductExp,
     addProductExp,
-    deleteProductExp
+    deleteProductExp,
+    updateProductExp
 };

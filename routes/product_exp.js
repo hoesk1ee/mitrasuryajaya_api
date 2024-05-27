@@ -11,4 +11,7 @@ router.post('/add-product-exp', productExpController.addProductExp);
 // * Router endpoint to delete product expired
 router.post('/delete-product-exp', productExpController.deleteProductExp);
 
+// *Router endpoint to update stock in product expired
+router.post('/update-product-exp', productExpController.updateProductExp);
+
 module.exports = router;
