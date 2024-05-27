@@ -6,7 +6,7 @@ async function getAllProductExp(productDetailId){
         SELECT pd.product_detail_pic, pd.product_detail_name, pd.price, pe.product_detail_id, pe.exp_date, pe.quantity, pe.product_barcode 
         FROM product_exp pe 
         JOIN product_detail pd ON pe.product_detail_id = pd.product_detail_id
-        WHERE pe.product_detail_id = $1`;
+        WHERE pe.product_detail_id = $1 AND is_deleted = false`;
 
     const values = [productDetailId];
 
@@ -18,8 +18,8 @@ async function getAllProductExp(productDetailId){
 // * Add product expired
 async function addProductExp(productDetailId, expDate, quantity, productBarcode){
     const query = `
-        INSERT INTO product_exp(product_detail_id, exp_date, quantity, product_barcode)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO product_exp(product_detail_id, exp_date, quantity, product_barcode, is_deleted)
+        VALUES ($1, $2, $3, $4, false)
     `;
 
     const values = [ productDetailId, expDate, quantity, productBarcode ];
