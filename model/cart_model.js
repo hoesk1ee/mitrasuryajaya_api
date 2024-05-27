@@ -19,6 +19,24 @@ async function getAllCart(userId){
     return result.rows;
 };
 
+// * Add new cart
+async function addCart(userId, productBarcode){
+    const query = `
+        INSERT INTO cart(user_id, product_exp_id)
+        SELECT temp.user_id, pe.product_exp_id
+        FROM (VALUES 
+            ($1, $2)
+        ) AS
+        temp (user_id, product_barcode)
+        JOIN product_exp pe ON temp.product_barcode = pe.product_barcode
+    `;
+
+    const values = [userId, productBarcode];
+
+    await pool.query(query, values);
+};
+
 module.exports = {
-    getAllCart
+    getAllCart,
+    addCart
 };

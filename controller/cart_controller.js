@@ -28,6 +28,21 @@ async function getAllCart(req,res){
     }
 };
 
+// * Controller to add new cart
+async function addCart(req,res){
+    try{
+        const { userId, productBarcode } = req.body;
+
+        await cartModel.addCart(userId, productBarcode);
+
+        res.status(201).json({ success : true, message : "New cart has been added!"});
+    }catch(e){
+        console.error("Error while adding new cart : ", e);
+        res.status(500).json({ success : false, message : `${e}`});
+    }
+};
+
 module.exports = {
-    getAllCart
+    getAllCart,
+    addCart
 };
