@@ -4,7 +4,7 @@ const pool = require('../db/index');
 async function getAllCart(userId){
     const query = `
         SELECT c.cart_id, c.user_id, c.product_exp_id, p.product_name, pd.product_detail_pic,
-        pd.product_detail_name, pd.price
+        pd.product_detail_name, pd.price, c.quantity
         FROM cart c 
         JOIN product_exp pe ON c.product_exp_id = pe.product_exp_id
         JOIN product_detail pd ON pe.product_detail_id = pd.product_detail_id
@@ -45,8 +45,18 @@ async function deleteCart(userId, productExpId){
     await pool.query(query,values);
 };
 
+// * Update quantity based on user_id and product_exp_id
+async function updateCart( quantity, cartId, userId){
+    const query = `UPDATE cart SET quantity = $1 WHERE cart_Id = $2 AND user_id = $3`;
+
+    const values = [quantity, cartId, userId];
+
+    await pool.query(query, values);
+};
+
 module.exports = {
     getAllCart,
     addCart,
-    deleteCart
+    deleteCart,
+    updateCart
 };

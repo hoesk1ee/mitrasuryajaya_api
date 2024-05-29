@@ -11,4 +11,7 @@ router.post('/add-cart', cartController.addCart);
 // * Router endpoint to delete cart based on userId and productExpId
 router.delete('/delete-cart/:userId/:productExpId', cartController.deleteCart);
 
+// * Router endpoint to update cart based on cart_id and userId
+router.put('/update-quantity', cartController.updateCart);
+
 module.exports = router;

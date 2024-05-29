@@ -17,8 +17,8 @@ async function getAllCart(req,res){
                 success : true,
                 user_id : carts[0].user_id,
                 carts : carts.map(
-                    ({cart_id, product_exp_id, product_name, product_detail_pic, product_detail_name, price}) =>
-                        ({cart_id, product_exp_id, product_name, product_detail_pic, product_detail_name, price})
+                    ({cart_id, product_exp_id, product_name, product_detail_pic, product_detail_name, price, quantity}) =>
+                        ({cart_id, product_exp_id, product_name, product_detail_pic, product_detail_name, price, quantity})
                 )
             });
         }
@@ -56,8 +56,23 @@ async function deleteCart(req,res){
     }
 };
 
+// * Controller to update cart based on cart_id and user_id
+async function updateCart(req,res){
+    try{
+        const { quantity, cartId, userId } = req.body;
+
+        await cartModel.updateCart(quantity, cartId, userId);
+
+        res.status(201).json({ success : true, message : "Quantity has been updated!"});
+    }catch(e){
+        console.error("Error while updating cart : ", e);
+        res.status(500).json({ success : false, message : `${e}`});
+    }
+};
+
 module.exports = {
     getAllCart,
     addCart,
-    deleteCart
+    deleteCart, 
+    updateCart
 };
