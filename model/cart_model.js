@@ -22,12 +22,12 @@ async function getAllCart(userId){
 // * Add new cart
 async function addCart(userId, productBarcode){
     const query = `
-        INSERT INTO cart(user_id, product_exp_id)
-        SELECT temp.user_id, pe.product_exp_id
+        INSERT INTO cart(user_id, product_exp_id, quantity)
+        SELECT temp.user_id, pe.product_exp_id, temp.quantity
         FROM (VALUES 
-            ($1, $2)
+            ($1, $2, 1)
         ) AS
-        temp (user_id, product_barcode)
+        temp (user_id, product_barcode, quantity)
         JOIN product_exp pe ON temp.product_barcode = pe.product_barcode
     `;
 
@@ -36,7 +36,17 @@ async function addCart(userId, productBarcode){
     await pool.query(query, values);
 };
 
+// * Delete cart based on user_id and product_exp_id
+async function deleteCart(userId, productExpId){
+    const query = `DELETE FROM cart WHERE user_id = $1 AND product_exp_id = $2`;
+
+    const values = [userId, productExpId];
+
+    await pool.query(query,values);
+};
+
 module.exports = {
     getAllCart,
-    addCart
+    addCart,
+    deleteCart
 };

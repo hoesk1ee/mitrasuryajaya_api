@@ -42,7 +42,22 @@ async function addCart(req,res){
     }
 };
 
+// * Controller to delete cart based on userId and productExpId
+async function deleteCart(req,res){
+    try{
+        const { userId, productExpId } = req.params;
+
+        await cartModel.deleteCart(userId, productExpId);
+
+        res.status(201).json({ success : true, message : "Cart has been deleted!"});
+    }catch(e){
+        console.error("Error while deleting cart : ", e);
+        res.status(500).json({ success : false, message : `${e}` });
+    }
+};
+
 module.exports = {
     getAllCart,
-    addCart
+    addCart,
+    deleteCart
 };
