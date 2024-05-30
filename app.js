@@ -36,7 +36,12 @@ app.use('/product', productRoute);
 const productDetailRoute = require('./routes/product_detail');
 app.use('/product-detail', productDetailRoute);
 
+// * route product_exp
+const productExpRoute = require('./routes/product_exp');
+app.use('/product-exp', productExpRoute);
+
 // * route cart
 const cartRoute = require('./routes/cart');
 app.use('/cart', cartRoute);
+
 module.exports = app;
