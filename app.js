@@ -40,4 +40,8 @@ app.use('/product-detail', productDetailRoute);
 const productExpRoute = require('./routes/product_exp');
 app.use('/product-exp', productExpRoute);
 
+// * route cart
+const cartRoute = require('./routes/cart');
+app.use('/cart', cartRoute);
+
 module.exports = app;
