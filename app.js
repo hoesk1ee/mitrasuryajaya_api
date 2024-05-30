@@ -44,4 +44,8 @@ app.use('/product-exp', productExpRoute);
 const cartRoute = require('./routes/cart');
 app.use('/cart', cartRoute);
 
+// * route invoice
+const invoiceRoute = require('./routes/invoice');
+app.use('/invoice', invoiceRoute);
+
 module.exports = app;
