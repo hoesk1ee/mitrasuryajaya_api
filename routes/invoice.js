@@ -9,6 +9,9 @@ router.get('/', invoiceController.getAllInvoice);
 router.post('/add-invoice', invoiceController.addInvoice);
 
 // * Router endpoint to fetch invoice based on customerId
-router.get('/:customerId', invoiceController.getInvoiceByCustomerId);
+router.get('/customer-invoice/:customerId', invoiceController.getInvoiceByCustomerId);
+
+// * Router endpoint to fetch invoice based on userId
+router.get('/:userId', invoiceController.getInvoiceByUserId);
 
 module.exports = router;

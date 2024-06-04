@@ -59,8 +59,33 @@ async function getInvoiceByCustomerId(req,res){
     }
 };
 
+// * Controller to fetch invoice based on userId
+async function getInvoiceByUserId(req,res){
+    try{
+        const {userId} = req.params;
+
+        const invoice = await invoiceModel.getInvoiceByUserId(userId);
+
+        if(invoice.length == 0){
+            res.json({
+                success : true,
+                message : "No Invoice"
+            });
+        }else{
+            res.json({
+                success : true,
+                invoice : invoice 
+            });
+        }
+    }catch(e){
+        console.error("Error while fetching invoice based on userId : ", e);
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
+    }
+};
+
 module.exports = {
     getAllInvoice,
     addInvoice, 
-    getInvoiceByCustomerId
+    getInvoiceByCustomerId,
+    getInvoiceByUserId
 };
