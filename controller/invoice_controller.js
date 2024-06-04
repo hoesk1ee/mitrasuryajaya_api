@@ -1,6 +1,6 @@
 const invoiceModel = require('../model/invoice_model');
 
-// * Controller to fetch invoice by customerId
+// * Controller to fetch invoice
 async function getAllInvoice(req,res){
     try{
         const invoice = await invoiceModel.getAllInvoice();
@@ -22,6 +22,20 @@ async function getAllInvoice(req,res){
     }
 };
 
+// * Controller to add new invoice
+async function addInvoice(req,res){
+    try{
+        const { customerId, invoiceType, totalPrice, userId } = req.body;
+
+        await invoiceModel.addInvoice(customerId, invoiceType, totalPrice, userId);
+        res.status(201).json({ success : true, message : "New invoice has been added!"});
+    }catch(e){
+        console.error("Error while adding new invoice : ", e);
+        res.status(500).json({ success : false, message : `${e}`});
+    }
+};
+
 module.exports = {
-    getAllInvoice
+    getAllInvoice,
+    addInvoice
 };
