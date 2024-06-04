@@ -75,8 +75,19 @@ async function addInvoice(customerId, invoiceType, totalPrice, userId){
     }
 };
 
+// * Read Invoice By customer_id
+async function getInvoiceByCustomerId(customerId){
+    const query = `SELECT * FROM invoice WHERE customer_id = $1`;
+
+    const values = [customerId];
+
+    const result = await pool.query(query, values);
+
+    return result.rows;
+};
 
 module.exports = {
     getAllInvoice,
-    addInvoice
+    addInvoice,
+    getInvoiceByCustomerId
 };
