@@ -14,4 +14,7 @@ router.get('/customer-invoice/:customerId', invoiceController.getInvoiceByCustom
 // * Router endpoint to fetch invoice based on userId
 router.get('/:userId', invoiceController.getInvoiceByUserId);
 
+// * Router endpoint to fetch invoice item based on invoiceId
+router.get('/invoice-item/:invoiceId', invoiceController.getInvoiceItemByInvoiceId);
+
 module.exports = router;

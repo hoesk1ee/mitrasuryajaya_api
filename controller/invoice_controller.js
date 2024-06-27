@@ -83,9 +83,47 @@ async function getInvoiceByUserId(req,res){
     }
 };
 
+// * Controller to fetch invoice item based on invoice_id
+async function getInvoiceItemByInvoiceId(req,res){
+    try{
+        const {invoiceId} = req.params;
+
+        const invoiceItem = await invoiceModel.getInvoiceItemByInvoiceId(invoiceId);
+
+        if(invoiceItem.length == 0)
+            {
+                res.json({
+                    success : true,
+                    message : "No Invoice"
+                });
+            }else{
+                res.json({
+                    success : true,
+                    invoice_id : invoiceItem[0].invoice_id,
+                    invoice_date : invoiceItem[0].invoice_date,
+                    due_date : invoiceItem[0].due_date,
+                    invoice_type : invoiceItem[0].invoice_type,
+                    total_price : invoiceItem[0].total_price,
+                    customer_id : invoiceItem[0].customer_id,
+                    customer_name : invoiceItem[0].customer_name,
+                    user_id : invoiceItem[0].user_id,
+                    user_name : invoiceItem[0].user_name,
+                    invoice_item : invoiceItem.map(
+                        ({invoice_item_id, product_exp_id, quantity, product_name, product_detail_id, product_detail_name, product_detail_pic, price}) =>
+                            ({invoice_item_id, product_exp_id, quantity, product_name, product_detail_id, product_detail_name, product_detail_pic, price})
+                    )
+                });
+            }
+    }catch(e){
+        console.error("Error while fetching invoice : ", e);
+        res.status(500).json({ success : false, message : `Interval Server Error : ${e}`});
+    }
+};
+
 module.exports = {
     getAllInvoice,
     addInvoice, 
     getInvoiceByCustomerId,
-    getInvoiceByUserId
+    getInvoiceByUserId,
+    getInvoiceItemByInvoiceId
 };

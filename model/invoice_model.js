@@ -97,9 +97,31 @@ async function getInvoiceByUserId(userId){
     return result.rows;
 };
 
+// * Read invoice item based on invoice_id
+async function getInvoiceItemByInvoiceId(invoiceId){
+    const query = `
+    SELECT ii.*, i.*, pd.*, c.customer_name, u.user_name, p.product_name, pd.price
+    FROM invoice_item ii 
+    JOIN invoice i ON ii.invoice_id = i.invoice_id
+    JOIN customers c ON i.customer_id = c.customer_id
+    JOIN users u ON i.user_id = u.user_id
+    JOIN product_exp pe ON ii.product_exp_id = pe.product_exp_id
+    JOIN product_detail pd ON pe.product_detail_id = pd.product_detail_id
+    JOIN products p ON pd.product_id = p.product_id
+    WHERE ii.invoice_id = $1
+    `;
+
+    const values = [invoiceId];
+
+    const result = await pool.query(query, values);
+
+    return result.rows;
+};
+
 module.exports = {
     getAllInvoice,
     addInvoice,
     getInvoiceByCustomerId,
-    getInvoiceByUserId
+    getInvoiceByUserId,
+    getInvoiceItemByInvoiceId
 };
