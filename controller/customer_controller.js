@@ -5,12 +5,19 @@ async function getAllCustomers(req,res){
     try{
         const customers = await customerModel.getAllCustomers();
 
-        res.json(
-            {
-                success : true,
-                customers : customers
-            }
-        );
+        if(customers.length == 0){
+            res.json({
+                success : false,
+                message : "No Customer in this application"
+            });
+        }else{
+            res.json(
+                {
+                    success : true,
+                    customers : customers
+                }
+            );
+        }   
     }catch(e){
         console.error('Error fetching customers data : ', e);
         res.status(500).json({succes : false, error : "Internal server Error : ", e});
@@ -24,10 +31,17 @@ async function getCustomerById(req, res){
 
         const customers = await customerModel.getCustomerById(customerId);
 
-        res.json({
-            success : true,
-            customers : customers
-        });
+        if(customers.length == 0){
+            res.json({
+                success : false,
+                message : "No Customer with this ID"
+            });
+        }else{
+            res.json({
+                success : true,
+                customers : customers
+            });
+        }
     }catch(e){
         console.error('Error fetching customers data : ', e);
         res.status(500).json({ success : false, error : 'Internal server error : ', e});

@@ -11,8 +11,8 @@ async function getAllProductExp(req,res){
 
         if(product_exp.length == 0){
             res.json({
-                success : true,
-                message : "No product expired"
+                success : false,
+                message : "No Product Expired"
             });
         }else{
             res.json({

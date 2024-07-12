@@ -9,7 +9,7 @@ async function getAllProduct(req, res){
         
         if( products.length == 0 ){
             res.json({
-                success : true,
+                success : false,
                 message : "No Product in this category"
             });
         }else{

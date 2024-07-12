@@ -56,11 +56,6 @@ async function getInvoiceByCustomerId(req,res){
                 customer_address : invoice.customer_address,
                 total_bill : invoice.total_bill,
                 invoice: invoice.listInvoice
-                // ,
-                // customer_phone : invoice[0].customer.customer_phone
-                // ,
-                // customer_address : invoice[0].customer_address,
-                // total_bill : invoice[0].total_bill
             });
         }
     }catch(e){

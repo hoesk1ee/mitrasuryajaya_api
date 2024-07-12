@@ -40,10 +40,10 @@ async function getAllUser(req, res){
 
 // * Controller to receive req from frontend to add new user
 async function createUser(req, res){
-    const { userId, photoUrl, userRole, userName, phoneNumber, email, isVerified } = req.body;
+    const { userId, userRole, userName, phoneNumber, email } = req.body;
 
     try {
-        await userModel.createUser(userId, photoUrl, userRole, userName, phoneNumber, email, isVerified);
+        await userModel.createUser(userId, userRole, userName, phoneNumber, email);
 
         res.json({
             success : true,

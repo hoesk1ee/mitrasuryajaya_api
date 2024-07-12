@@ -21,14 +21,16 @@ async function getAllUser(){
 }
 
 // * Create new user
-async function createUser(userId, photoUrl, userRole, userName, phoneNumber, email, isVerified){
+async function createUser(userId, userRole, userName, phoneNumber, email){
     const query = `
-    INSERT INTO users(user_id, photo_url, user_role, user_name, phone_number, email, is_verified)
-    VALUES
-    ($1, $2, $3, $4, $5, $6, $7)
-    `
+        INSERT INTO 
+            users(user_id, photo_url, user_role, user_name, phone_number, email, is_verified)
+        VALUES
+            ($1, 'https://firebasestorage.googleapis.com/v0/b/mitra-surya-jaya.appspot.com/o/user.png?alt=media&token=6c53cb9c-975a-48ff-8d1a-da3ca2dc6dc6', 
+            $2, $3, $4, $5, false)
+    `;
 
-    const values = [userId, photoUrl, userRole, userName, phoneNumber, email, isVerified];
+    const values = [userId, userRole, userName, phoneNumber, email];
 
     await pool.query(query, values);
 }

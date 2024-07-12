@@ -5,12 +5,11 @@ async function getAllProductDetail(req,res){
     try{
         const { productId } = req.params;
 
-        // const product_name = await productDetailModel.getAllProductDetail(productId).product_name;
         const productDetails = await productDetailModel.getAllProductDetail(productId);
 
         if(productDetails.length == 0){
             res.json({
-                success : true,
+                success : false,
                 message : "No product variant"
             })
         }else{
