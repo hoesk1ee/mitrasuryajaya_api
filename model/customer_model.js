@@ -2,7 +2,14 @@ const pool = require('../db/index');
 
 // * Read All Customers
 async function getAllCustomers(){
-    const query = `SELECT * FROM customers` ;
+    const query = `
+        SELECT 
+            c.customer_name, c.customer_phone, c.customer_address,
+            SUM(COALESCE((i.total_price - (SELECT SUM(amount_paid) AS total_payment FROM payments WHERE invoice_id = i.invoice_id)), 0)) AS total_bill
+        FROM customers c 
+        LEFT JOIN invoice i ON c.customer_id = i.customer_id
+        GROUP BY c.customer_id
+    `;
     const result = await pool.query(query);
 
     return result.rows;
@@ -86,6 +93,7 @@ async function updateCustomer(customerId, customerName, customerPhone, customerA
         throw new Error('No Fields to Update');
     }
 };
+
 
 module.exports = {
     getAllCustomers,

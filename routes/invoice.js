@@ -17,4 +17,10 @@ router.get('/:userId', invoiceController.getInvoiceByUserId);
 // * Router endpoint to fetch invoice item based on invoiceId
 router.get('/invoice-item/:invoiceId', invoiceController.getInvoiceItemByInvoiceId);
 
+// * Router endpoint to fetch invoice based on invoice type where invoice type = 'piutang' and customer is null
+router.get('/invoice-type/piutang', invoiceController.getInvoiceByType);
+
+// * Router endpoint to update customer ID based on invoice ID
+router.put('/update-invoice', invoiceController.updateCustByInvoiceId);
+
 module.exports = router;

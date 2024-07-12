@@ -48,4 +48,8 @@ app.use('/cart', cartRoute);
 const invoiceRoute = require('./routes/invoice');
 app.use('/invoice', invoiceRoute);
 
+// * route payment
+const paymentRoute = require('./routes/payment');
+app.use('/payment', paymentRoute);
+
 module.exports = app;
