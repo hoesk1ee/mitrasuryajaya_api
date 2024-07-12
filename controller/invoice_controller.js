@@ -7,7 +7,7 @@ async function getAllInvoice(req,res){
 
         if(invoice.length == 0){
             res.json({
-                success : true,
+                success : false,
                 message : "No invoice"
             });
         }else{
@@ -44,13 +44,23 @@ async function getInvoiceByCustomerId(req,res){
 
         if(invoice.length == 0){
             res.json({
-                success : true,
+                success : false,
                 message : "No invoice"
             });
         }else{
             res.json({
                 success : true,
-                invoice : invoice
+                customer_id : invoice.customer_id,
+                customer_name : invoice.customer_name,
+                customer_phone : invoice.customer_phone,
+                customer_address : invoice.customer_address,
+                total_bill : invoice.total_bill,
+                invoice: invoice.listInvoice
+                // ,
+                // customer_phone : invoice[0].customer.customer_phone
+                // ,
+                // customer_address : invoice[0].customer_address,
+                // total_bill : invoice[0].total_bill
             });
         }
     }catch(e){
@@ -68,8 +78,8 @@ async function getInvoiceByUserId(req,res){
 
         if(invoice.length == 0){
             res.json({
-                success : true,
-                message : "No Invoice"
+                success : false,
+                message : "No invoice"
             });
         }else{
             res.json({
@@ -93,7 +103,7 @@ async function getInvoiceItemByInvoiceId(req,res){
         if(invoiceItem.length == 0)
             {
                 res.json({
-                    success : true,
+                    success : false,
                     message : "No Invoice"
                 });
             }else{
@@ -104,6 +114,7 @@ async function getInvoiceItemByInvoiceId(req,res){
                     due_date : invoiceItem[0].due_date,
                     invoice_type : invoiceItem[0].invoice_type,
                     total_price : invoiceItem[0].total_price,
+                    total_payment : invoiceItem[0].total_payment,
                     customer_id : invoiceItem[0].customer_id,
                     customer_name : invoiceItem[0].customer_name,
                     user_id : invoiceItem[0].user_id,
@@ -120,10 +131,47 @@ async function getInvoiceItemByInvoiceId(req,res){
     }
 };
 
+// * Controller to fetch invoice based on invoice type
+async function getInvoiceByType(req,res){
+    try{
+        const invoiceType = await invoiceModel.getInvoiceByType();
+
+        if(invoiceType.length == 0){
+            res.json({
+                success : false,
+                message : "No Invoice"
+            });
+        }else{
+            res.json({
+                success : true,
+                invoice : invoiceType
+            });
+        }
+    }catch(e){
+        console.error("Error while fetching invoices data : ", e);
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
+    }
+};
+
+// * Controller to update customer ID based on invoice ID
+async function updateCustByInvoiceId(req, res){
+    try{
+        const { customerId, invoiceId } = req.body;
+
+        await invoiceModel.updateCustByInvoiceId(customerId, invoiceId);
+        res.status(201).json({ success : true, message : "Customer ID has been updated!"});
+    }catch(e){
+        console.error("Error while updating customer id on invoice : ", e);
+        res.status(500).json({ success : false, message : `${e}`});
+    }
+};
+
 module.exports = {
     getAllInvoice,
     addInvoice, 
     getInvoiceByCustomerId,
     getInvoiceByUserId,
-    getInvoiceItemByInvoiceId
+    getInvoiceItemByInvoiceId,
+    getInvoiceByType,
+    updateCustByInvoiceId
 };

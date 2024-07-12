@@ -20,6 +20,9 @@ async function getPayment(req,res){
                 invoice_id : payment[0].invoice_id,
                 transaction_date : payment[0].invoice_date,
                 total_price : payment[0].total_price,
+                total_payment : payment[0].total_payment,
+                customer_name : payment[0].customer_name,
+                customer_phone : payment[0].customer_phone,
                 timeline : payment.map(({payment_date, amount_paid, note}) => 
                     ({payment_date : moment(payment_date).locale('id').format('DD MMMM YYYY HH:mm'), 
                         amount_paid, note}))

@@ -4,11 +4,14 @@ const pool = require('../db/index');
 async function getPayment(invoiceId){
     const query = `
             SELECT 
-                p.invoice_id, i.invoice_date, i.total_price, p.payment_date, p.amount_paid, p.note
+                p.invoice_id, i.invoice_date, i.total_price, p.payment_date, p.amount_paid, p.note,
+				c.customer_phone, c.customer_name, 
+                (SELECT SUM(amount_paid) AS total_amount_paid FROM payments WHERE invoice_id = $1) AS total_payment
             FROM payments p JOIN invoice i ON p.invoice_id = i.invoice_id
-            WHERE p.invoice_id = $1`;
+		    JOIN customers c ON i.customer_id = c.customer_id
+            WHERE p.invoice_id = $2`;
     
-    const values = [invoiceId];
+    const values = [invoiceId, invoiceId];
 
     const result = await pool.query(query, values);
 
@@ -37,7 +40,7 @@ async function addTimelinePayment(invoiceId,amountPaid,note){
         const resultGetTotalPrice = await pool.query(queryGetTotalPrice, valuesGetTotalPrice);
 
         // * Check if SUM Amount Paid > Total Price, cannot add timeline payment
-        if(sumAmountPaid  >= resultGetTotalPrice.rows[0].total_price){
+        if(sumAmountPaid  > resultGetTotalPrice.rows[0].total_price){
            return false;
         }else{
              // * Insert Timeline Payment
