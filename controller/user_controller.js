@@ -40,11 +40,17 @@ async function getAllUser(req, res){
 
 // * Controller to receive req from frontend to add new user
 async function createUser(req, res){
-    const { userId, userRole, userName, phoneNumber, email } = req.body;
-
     try {
-        await userModel.createUser(userId, userRole, userName, phoneNumber, email);
+        let { userId, photo_url, userRole, userName, phoneNumber, email } = req.body;
 
+        if(photo_url == null){
+            photo_url = 'https://firebasestorage.googleapis.com/v0/b/mitra-surya-jaya.appspot.com/o/user.png?alt=media&token=6c53cb9c-975a-48ff-8d1a-da3ca2dc6dc6';
+
+            await userModel.createUser(userId, photo_url, userRole, userName, phoneNumber, email);
+        }else{
+            await userModel.createUser(userId, photo_url, userRole, userName, phoneNumber, email);
+
+        }
         res.json({
             success : true,
             message : "User has been created!",
