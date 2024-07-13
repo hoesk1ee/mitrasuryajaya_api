@@ -15,6 +15,7 @@ async function getAllProduct(req, res){
         }else{
             res.json({
                 success : true,
+                message : "Berhasil dapat data!",
                 products : products
             });
         }

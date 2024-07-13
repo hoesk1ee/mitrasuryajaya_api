@@ -7,10 +7,18 @@ async function getUserById(req, res){
     try {
         const user = await userModel.getUserById(userId);
 
-        res.json({
-            success : true, 
-            user : user
-    }); 
+        if(user.length == 0){
+            res.json({
+                success : false,
+                message : "No User with this ID!"
+            });
+        }else{
+            res.json({
+                success : true, 
+                message : "Berhasil dapat data!",
+                user : user
+            }); 
+        }
     } catch(e) {
         console.error('Failed to retrieve user data : ', e);
         res.status(500).json({
@@ -25,10 +33,18 @@ async function getAllUser(req, res){
     try {
         const users = await userModel.getAllUser();
 
-        res.json({
-            success : true, 
-            users : users,
-        });
+        if(users.length == 0){
+            res.json({
+                success : false,
+                message : "No user in this application!"
+            });
+        }else{
+            res.json({
+                success : true, 
+                message : "Berhasil dapat data!",
+                users : users
+            });
+        }
     } catch(e){
         console.error("Failed to retrieve user data : ", e);
         res.status(500).json({

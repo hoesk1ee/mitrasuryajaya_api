@@ -14,6 +14,7 @@ async function getAllCustomers(req,res){
             res.json(
                 {
                     success : true,
+                    message : "Berhasil dapat data!",
                     customers : customers
                 }
             );
@@ -39,6 +40,7 @@ async function getCustomerById(req, res){
         }else{
             res.json({
                 success : true,
+                message : "Berhasil dapat data!",
                 customers : customers
             });
         }

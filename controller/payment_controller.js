@@ -12,11 +12,12 @@ async function getPayment(req,res){
         if(payment.length == 0){
             res.json({
                 success : false,
-                message : "No Timeline Payment"
+                message : "No Timeline Payment!"
             });
         }else{
             res.json({
                 success : true,
+                message : "Berhasil dapat data!",
                 invoice_id : payment[0].invoice_id,
                 transaction_date : payment[0].invoice_date,
                 total_price : payment[0].total_price,

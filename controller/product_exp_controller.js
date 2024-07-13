@@ -12,11 +12,12 @@ async function getAllProductExp(req,res){
         if(product_exp.length == 0){
             res.json({
                 success : false,
-                message : "No Product Expired"
+                message : "No Product Expired!"
             });
         }else{
             res.json({
                 success : true,
+                message : "Berhasil dapat data!",
                 product_detail_pic : product_exp[0].product_detail_pic,
                 product_detail_name : product_exp[0].product_detail_name,
                 price : product_exp[0].price,

@@ -8,12 +8,13 @@ async function getAllCategories(req, res){
         if(categories.length == 0){
             res.json({
                 success : false,
-                message : "No Category"
+                message : "No Category in this application"
             });
         }else{
             res.json(
                 {
                     success : true,
+                    message : "Berhasil dapat data!",
                     categories : categories
                 }
             );

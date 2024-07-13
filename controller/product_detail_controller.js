@@ -10,11 +10,12 @@ async function getAllProductDetail(req,res){
         if(productDetails.length == 0){
             res.json({
                 success : false,
-                message : "No product variant"
+                message : "No product variant!"
             })
         }else{
             res.json({
                 success : true,
+                message : "Berhasil dapat data!",
                 product_id : productDetails[0].product_id,
                 product_pic : productDetails[0].product_pic,
                 product_name : productDetails[0].product_name,

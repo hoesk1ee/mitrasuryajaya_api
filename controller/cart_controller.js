@@ -15,6 +15,7 @@ async function getAllCart(req,res){
         } else {
             res.json({
                 success : true,
+                message : "Berhasil dapat data!",
                 user_id : carts[0].user_id,
                 carts : carts.map(
                     ({cart_id, product_exp_id, product_name, product_detail_pic, product_detail_name, price, quantity}) =>

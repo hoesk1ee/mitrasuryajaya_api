@@ -8,11 +8,12 @@ async function getAllInvoice(req,res){
         if(invoice.length == 0){
             res.json({
                 success : false,
-                message : "No invoice"
+                message : "No invoice in this application!"
             });
         }else{
             res.json({
                 success : true,
+                message : "Berhasil dapat data!",
                 invoice : invoice
             });
         }
@@ -45,11 +46,12 @@ async function getInvoiceByCustomerId(req,res){
         if(invoice.length == 0){
             res.json({
                 success : false,
-                message : "No invoice"
+                message : "No Invoice with this Customer ID!"
             });
         }else{
             res.json({
                 success : true,
+                message : "Berhasil dapat data!",
                 customer_id : invoice.customer_id,
                 customer_name : invoice.customer_name,
                 customer_phone : invoice.customer_phone,
@@ -74,11 +76,12 @@ async function getInvoiceByUserId(req,res){
         if(invoice.length == 0){
             res.json({
                 success : false,
-                message : "No invoice"
+                message : "No Invoice with this Invoice ID!"
             });
         }else{
             res.json({
                 success : true,
+                message : "Berhasil dapat data!",
                 invoice : invoice 
             });
         }
@@ -99,11 +102,12 @@ async function getInvoiceItemByInvoiceId(req,res){
             {
                 res.json({
                     success : false,
-                    message : "No Invoice"
+                    message : "No Invoice Item with this Invoice ID!"
                 });
             }else{
                 res.json({
                     success : true,
+                    message : "Berhasil dapat data!",
                     invoice_id : invoiceItem[0].invoice_id,
                     invoice_date : invoiceItem[0].invoice_date,
                     due_date : invoiceItem[0].due_date,
@@ -134,11 +138,12 @@ async function getInvoiceByType(req,res){
         if(invoiceType.length == 0){
             res.json({
                 success : false,
-                message : "No Invoice"
+                message : "No Invoice with Piutang Type!"
             });
         }else{
             res.json({
                 success : true,
+                message : "Berhasil dapat data!",
                 invoice : invoiceType
             });
         }
