@@ -21,7 +21,7 @@ async function getAllUser(){
 }
 
 // * Create new user
-async function createUser(userId, photo_url, userRole, userName, phoneNumber, email){
+async function createUser(userId, photoUrl, userRole, userName, phoneNumber, email){
     const query = `
         INSERT INTO 
             users(user_id, photo_url, user_role, user_name, phone_number, email, is_verified)
@@ -29,7 +29,7 @@ async function createUser(userId, photo_url, userRole, userName, phoneNumber, em
             ($1, $2, $3, $4, $5, $6, false)
     `;
 
-    const values = [userId, photo_url, userRole, userName, phoneNumber, email];
+    const values = [userId, photoUrl, userRole, userName, phoneNumber, email];
 
     await pool.query(query, values);
 }
