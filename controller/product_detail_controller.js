@@ -10,12 +10,12 @@ async function getAllProductDetail(req,res){
         if(productDetails.length == 0){
             res.json({
                 success : false,
-                message : "No product variant!"
+                message : "Tidak ada varian produk!"
             })
         }else{
             res.json({
                 success : true,
-                message : "Berhasil dapat data!",
+                message : "Berhasil dapat data varian produk!",
                 product_id : productDetails[0].product_id,
                 product_pic : productDetails[0].product_pic,
                 product_name : productDetails[0].product_name,
@@ -26,8 +26,7 @@ async function getAllProductDetail(req,res){
             })
         }
     } catch(e){
-        console.error('Error while fetching product detail data : ', e);
-        res.status(500).json({ success : false, message : "Internal server Error", e});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
 
@@ -38,10 +37,9 @@ async function addProductDetail(req,res){
 
         await productDetailModel.addProductDetail(productId, productDetailPic, productDetailName, price);
 
-        res.status(201).json({ success : true, message : "New Product variant has been added!"});
+        res.status(201).json({ success : true, message : "Varian produk baru berhasil ditambahkan!"});
     } catch(e){
-        console.error("Error while adding new product variant : ", e);
-        res.status(500).json({ success : false, message : `${e}`});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
 
@@ -52,10 +50,9 @@ async function deleteProductDetail(req,res){
 
         await productDetailModel.deleteProductDetail(productId, productDetailId);
 
-        res.status(201).json({success : true, message : "Product variant has been deleted!"});
+        res.status(201).json({success : true, message : "Varian produk berhasil dihapus!"});
     } catch(e){
-        console.error("Error while deleting product detail : ", e);
-        res.status(500).json({success : false, message : `${e}`});
+        res.status(500).json({success : false, message : `Internal Server Error : ${e}`});
     }
 };
 
@@ -66,10 +63,9 @@ async function updateProductDetail(req,res){
 
         await productDetailModel.updateProductDetail(productId, productDetailId, productDetailPic, productDetailName, price);
 
-        res.status(201).json({success : true, message : "Product variant has been updated!"});
+        res.status(201).json({success : true, message : "Data varian produk berhasil diubah!"});
     } catch(e){
-        console.error("Error while updating product detail : ", e);
-        res.status(500).json( {success : false, message : `${e}`, e});
+        res.status(500).json( {success : false, message : `Internal Server Error : ${e}`, e});
     }
 };
 

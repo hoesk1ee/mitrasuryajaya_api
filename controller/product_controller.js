@@ -10,19 +10,18 @@ async function getAllProduct(req, res){
         if( products.length == 0 ){
             res.json({
                 success : false,
-                message : "No Product in this category"
+                message : "Tidak ada produk di kategori ini"
             });
         }else{
             res.json({
                 success : true,
-                message : "Berhasil dapat data!",
+                message : "Berhasil dapat data produk!",
                 products : products
             });
         }
         
     } catch(e){
-        console.error('Error fetching products data : ', e);
-        res.status(500).json({ success: false, error : "Internal Server Error", e});
+        res.status(500).json({ success: false, message : `Internal Server Error : ${e}`});
     }
 };
 
@@ -33,10 +32,9 @@ async function addProduct(req, res){
 
         await productModel.addProduct(categoryId, productPic, productName);
 
-        res.status(201).json({ success : true, message : "Product has been added!"});
+        res.status(201).json({ success : true, message : "Produk berhasil ditambahkan!"});
     } catch(e){
-        console.error("Error while adding product : ", e);
-        res.status(500).json({ success : false, message : `${e}`});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
 
@@ -47,10 +45,9 @@ async function deleteProduct(req,res){
 
         await productModel.deleteProduct(productId, categoryId);
 
-        res.status(201).json({success : true, message : "Product has been deleted!"});
+        res.status(201).json({success : true, message : "Produk berhasil dihapus!"});
     }catch(e){
-        console.error("Error while deleting product : ", e);
-        res.status(500).json({ success : false, message : `${e}`});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
 
@@ -61,10 +58,9 @@ async function updateProduct(req,res){
 
         await productModel.updateProduct(productId, categoryId, productPic, productName);
 
-        res.status(201).json({ success : true, message : "Product has been updated!"});
+        res.status(201).json({ success : true, message : "Data produk berhasil diubah!"});
     }catch(e){
-        console.error("Error while updating product : ", e);
-        res.status(500).json({ success : false, message : `${e}`});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
 

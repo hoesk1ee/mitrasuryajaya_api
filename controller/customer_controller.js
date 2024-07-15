@@ -8,20 +8,19 @@ async function getAllCustomers(req,res){
         if(customers.length == 0){
             res.json({
                 success : false,
-                message : "No Customer in this application"
+                message : "Tidak ada data customer di apilkasi ini"
             });
         }else{
             res.json(
                 {
                     success : true,
-                    message : "Berhasil dapat data!",
+                    message : "Berhasil dapat data customer!",
                     customers : customers
                 }
             );
         }   
     }catch(e){
-        console.error('Error fetching customers data : ', e);
-        res.status(500).json({succes : false, error : "Internal server Error : ", e});
+        res.status(500).json({succes : false, message : `Internal Server Error : ${e}`});
     }
 };
 
@@ -35,18 +34,17 @@ async function getCustomerById(req, res){
         if(customers.length == 0){
             res.json({
                 success : false,
-                message : "No Customer with this ID"
+                message : "Tidak ada customer dengan ID ini"
             });
         }else{
             res.json({
                 success : true,
-                message : "Berhasil dapat data!",
+                message : "Berhasil dapat data customer!",
                 customers : customers
             });
         }
     }catch(e){
-        console.error('Error fetching customers data : ', e);
-        res.status(500).json({ success : false, error : 'Internal server error : ', e});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
 
@@ -57,10 +55,9 @@ async function addCustomer(req,res){
 
         await customerModel.addCustomer(customerName, customerPhone, customerAddress);
 
-        res.status(201).json({ success : true, message : "New Customer has been added!"});
+        res.status(201).json({ success : true, message : "Customer baru berhasil ditambahkan!"});
     } catch (e){
-        console.error("Error while adding new customer : ", e);
-        res.status(500).json({ success : false, message : `${e}`});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
 
@@ -71,10 +68,9 @@ async function deleteCustomer (req, res){
 
         await customerModel.deleteCustomer(customerId);
 
-        res.status(201).json({ success : true, message : "Customer has been deleted!"});
+        res.status(201).json({ success : true, message : "Customer berhasil dihapus!"});
      } catch (e){
-        console.error("Error while deleting customer : ", e);
-        res.status(500).json({ success : false, message : `${e}`});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
      }
 };
 
@@ -85,10 +81,9 @@ async function updateCustomer(req,res){
         
         await customerModel.updateCustomer(customerId, customerName, customerPhone, customerAddress);
 
-        res.status(201).json({ success : true, message : "Customer has been updated!"});
+        res.status(201).json({ success : true, message : "Data customer berhasil diubah!"});
     }catch(e){
-        console.error("Error while updating customer : ", e);
-        res.status(500).json({ success : false, message : `${e}`});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
 

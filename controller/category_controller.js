@@ -8,20 +8,19 @@ async function getAllCategories(req, res){
         if(categories.length == 0){
             res.json({
                 success : false,
-                message : "No Category in this application"
+                message : "Tidak ada kategori di aplikasi ini"
             });
         }else{
             res.json(
                 {
                     success : true,
-                    message : "Berhasil dapat data!",
+                    message : "Berhasil dapat data kategori!",
                     categories : categories
                 }
             );
         }
     } catch(e) {
-        console.error('Error fetching categories data : ', e);
-        res.status(500).json({success: false, error : "Internal Server Error : ", e});
+        res.status(500).json({success: false, message : `Internal Server Error : ${e}`});
     }
 };
 
@@ -32,10 +31,9 @@ async function addCategory(req, res){
 
         await categoryModel.addCategory(categoryPic, categoryName);
 
-        res.status(201).json({ success : true, message: "New category has been added!"});
+        res.status(201).json({ success : true, message: "Kategori baru berhasil ditambahkan!"});
     } catch(e) {
-        console.error('Error while adding new category : ', e);
-        res.status(500).json({ success : false, message: `${e}`});
+        res.status(500).json({ success : false, message: `Internal Server Error : ${e}`});
     }
 }
 
@@ -46,10 +44,9 @@ async function deleteCategory(req, res){
 
         await categoryModel.deleteCategory(categoryId);
 
-        res.status(201).json({ success : true, message: "Category has been deleted!"});
+        res.status(201).json({ success : true, message: "Data kategori berhasil dihapus!"});
     } catch(e){
-        console.error("Error while deleting category : ", e);
-        res.status(500).json({ success : false, message: `${e}`});
+        res.status(500).json({ success : false, message: `Internal Server Error : ${e}`});
     }
 };
 
@@ -60,10 +57,9 @@ async function updateCategory(req, res){
 
         await categoryModel.updateCategory(categoryId, categoryPic, categoryName);
 
-        res.status(201).json({ success : true, message: "Category has been updated!"});
+        res.status(201).json({ success : true, message: "Data kategori berhasil diubah!"});
     } catch(e){
-        console.error("Error while updating category : ", e);
-        res.status(500).json({ success : false, message: `${e}`});
+        res.status(500).json({ success : false, message: `Internal Server Error : ${e}`});
     }
 };
 

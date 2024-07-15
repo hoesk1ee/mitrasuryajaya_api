@@ -10,12 +10,12 @@ async function getAllCart(req,res){
         if(carts.length == 0){
             res.json({
                 success : false,
-                message : "No Product List in this cart"
+                message : "Tidak ada list produk di keranjang ini"
             });
         } else {
             res.json({
                 success : true,
-                message : "Berhasil dapat data!",
+                message : "Berhasil dapat data cart!",
                 user_id : carts[0].user_id,
                 carts : carts.map(
                     ({cart_id, product_exp_id, product_name, product_detail_pic, product_detail_name, price, quantity}) =>
@@ -24,7 +24,6 @@ async function getAllCart(req,res){
             });
         }
     }catch(e){
-        console.error('Error while fetching cart data : ', e);
         res.status(500).json({ success : false, message : `Interval Server Error : ${e}`});
     }
 };
@@ -36,10 +35,9 @@ async function addCart(req,res){
 
         await cartModel.addCart(userId, productBarcode);
 
-        res.status(201).json({ success : true, message : "New cart has been added!"});
+        res.status(201).json({ success : true, message : "Cart baru berhasil ditambahkan!"});
     }catch(e){
-        console.error("Error while adding new cart : ", e);
-        res.status(500).json({ success : false, message : `${e}`});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
 
@@ -50,10 +48,9 @@ async function deleteCart(req,res){
 
         await cartModel.deleteCart(userId, productExpId);
 
-        res.status(201).json({ success : true, message : "Cart has been deleted!"});
+        res.status(201).json({ success : true, message : "Cart berhasil dihapus!"});
     }catch(e){
-        console.error("Error while deleting cart : ", e);
-        res.status(500).json({ success : false, message : `${e}` });
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}` });
     }
 };
 
@@ -64,10 +61,9 @@ async function updateCart(req,res){
 
         await cartModel.updateCart(quantity, cartId, userId);
 
-        res.status(201).json({ success : true, message : "Quantity has been updated!"});
+        res.status(201).json({ success : true, message : "Jumlah kuantitas berhasil diubah!"});
     }catch(e){
-        console.error("Error while updating cart : ", e);
-        res.status(500).json({ success : false, message : `${e}`});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
 

@@ -12,12 +12,12 @@ async function getAllProductExp(req,res){
         if(product_exp.length == 0){
             res.json({
                 success : false,
-                message : "No Product Expired!"
+                message : "Tidak ada produk kadaluwarsa!"
             });
         }else{
             res.json({
                 success : true,
-                message : "Berhasil dapat data!",
+                message : "Berhasil dapat data produk kadaluwarsa!",
                 product_detail_pic : product_exp[0].product_detail_pic,
                 product_detail_name : product_exp[0].product_detail_name,
                 price : product_exp[0].price,
@@ -29,7 +29,6 @@ async function getAllProductExp(req,res){
             });
         }
     } catch(e){
-        console.error('Error while fetching product expired : ', e);
         res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
@@ -41,9 +40,8 @@ async function addProductExp(req,res){
 
         await productExpModel.addProductExp(productDetailId, expDate, quantity, productBarcode);
 
-        res.status(201).json({ success : true, message : "New product expired has been added!" });
+        res.status(201).json({ success : true, message : "Produk kadaluwarsa berhasil ditambahkan!" });
     } catch(e){
-        console.error("Error while adding product expired : ", e);
         res.status(500).json({ success : false, message : `${e}`});
     }
 };
@@ -55,10 +53,9 @@ async function deleteProductExp(req,res){
 
         await productExpModel.deleteProductExp(quantity, productExpId, transactionType, note);
 
-        res.status(201).json({ success : true, message : "Product expired has been deleted!"});
+        res.status(201).json({ success : true, message : "Produk kadaluwarsa berhasil dihapus!"});
     } catch(e){
-        console.error("Error while deleting product expired : ", e);
-        res.status(500).json({ success : false, messagge : `${e}`});
+        res.status(500).json({ success : false, messagge : `Internal Server Error : ${e}`});
     }
 };
 
@@ -69,10 +66,9 @@ async function updateProductExp(req,res){
 
         await productExpModel.updateProductExp(quantity, productExpId, transactionType, note);
 
-        res.status(201).json({ success: true, message : "Stock has been added"});
+        res.status(201).json({ success: true, message : "Stok berhasil ditambahkan"});
     }catch(e){
-        console.error("Error while updating stock in product expired : ", e);
-        res.status(500).json({ success : false, message :`${e}`});
+        res.status(500).json({ success : false, message :`Internal Server Error : ${e}`});
     }
 };
 

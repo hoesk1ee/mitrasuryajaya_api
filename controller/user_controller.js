@@ -2,28 +2,28 @@ const userModel = require('../model/user_model');
 
 // * Controller to req userId from frontend and give back data res
 async function getUserById(req, res){
-    const { userId } = req.params;
 
     try {
+        const { userId } = req.params;
+
         const user = await userModel.getUserById(userId);
 
         if(user.length == 0){
             res.json({
                 success : false,
-                message : "No User with this ID!"
+                message : "Tidak ada user dengan ID ini!"
             });
         }else{
             res.json({
                 success : true, 
-                message : "Berhasil dapat data!",
+                message : "Berhasil dapat data user!",
                 user : user
             }); 
         }
     } catch(e) {
-        console.error('Failed to retrieve user data : ', e);
         res.status(500).json({
             success : false, 
-            message : "Failed to retrieve user data : ", e,
+            message : `Tidak berhasil mendapatkan data : ${e}`
         });
     }
 };
@@ -36,20 +36,19 @@ async function getAllUser(req, res){
         if(users.length == 0){
             res.json({
                 success : false,
-                message : "No user in this application!"
+                message : "Tidak ada user di aplikasi ini!"
             });
         }else{
             res.json({
                 success : true, 
-                message : "Berhasil dapat data!",
+                message : "Berhasil dapat data user!",
                 users : users
             });
         }
     } catch(e){
-        console.error("Failed to retrieve user data : ", e);
         res.status(500).json({
             success : false,
-            message : `Failed to retreive user data : ${3}`,
+            message : `Tidak berhasil mendapatkan data user : ${e}`
         });
     }
 }
@@ -69,13 +68,12 @@ async function createUser(req, res){
         }
         res.json({
             success : true,
-            message : "User has been created!",
+            message : "User berhasil dibuat!",
         });
     } catch(e) {
-        console.error("Failed to create new user : ", e);
         res.status(500).json({
             success : false,
-            message : `Failed to create new user : ${e}`,
+            message : `Tidak berhasil membuat user : ${e}`,
         });
     }
 };
@@ -90,19 +88,18 @@ async function updateUserVerification(req, res){
         if(result){
             res.json({
                 success : false,
-                message : "User already verified!"
+                message : "User sudah di verifikasi!"
             });
         } else {
             res.json({
                 success : true,
-                message : "User has been verified!",
+                message : "User sudah di verifikasi!",
             });
         }
     } catch(e) {
-        console.error("Failed to verif user : ", e);
         res.status(500).json({
             success : false,
-            message : `Failed to verif current user : ${e}`,
+            message : `Tidak berhasil memverifikasi user ini : ${e}`
         });
    }
 };

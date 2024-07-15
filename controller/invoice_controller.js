@@ -8,17 +8,16 @@ async function getAllInvoice(req,res){
         if(invoice.length == 0){
             res.json({
                 success : false,
-                message : "No invoice in this application!"
+                message : "Tidak ada invoice di aplikasi ini!"
             });
         }else{
             res.json({
                 success : true,
-                message : "Berhasil dapat data!",
+                message : "Berhasil dapat data invoice!",
                 invoice : invoice
             });
         }
     }catch(e){
-        console.error("Error fetching invoices data : ", e);
         res.status(500).json({ success : false, message : `Internal Server Error : ${e} `});
     }
 };
@@ -29,10 +28,9 @@ async function addInvoice(req,res){
         const { customerId, invoiceType, totalPrice, userId } = req.body;
 
         await invoiceModel.addInvoice(customerId, invoiceType, totalPrice, userId);
-        res.status(201).json({ success : true, message : "New invoice has been added!"});
+        res.status(201).json({ success : true, message : "Invoice baru berhasil ditambahkan!"});
     }catch(e){
-        console.error("Error while adding new invoice : ", e);
-        res.status(500).json({ success : false, message : `${e}`});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
 
@@ -46,12 +44,12 @@ async function getInvoiceByCustomerId(req,res){
         if(invoice.length == 0){
             res.json({
                 success : false,
-                message : "No Invoice with this Customer ID!"
+                message : "Tidak ada invoice dengan customer ID ini!"
             });
         }else{
             res.json({
                 success : true,
-                message : "Berhasil dapat data!",
+                message : "Berhasil dapat data invoice dengan customer ID ini!",
                 customer_id : invoice.customer_id,
                 customer_name : invoice.customer_name,
                 customer_phone : invoice.customer_phone,
@@ -61,7 +59,6 @@ async function getInvoiceByCustomerId(req,res){
             });
         }
     }catch(e){
-        console.error("Error fetching invoice based on customer_id : ", e);
         res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
@@ -76,17 +73,16 @@ async function getInvoiceByUserId(req,res){
         if(invoice.length == 0){
             res.json({
                 success : false,
-                message : "No Invoice with this Invoice ID!"
+                message : "Tidak ada invoice dengan invoice ID ini!"
             });
         }else{
             res.json({
                 success : true,
-                message : "Berhasil dapat data!",
+                message : "Berhasil dapat data invoice dengan invoice ID ini!",
                 invoice : invoice 
             });
         }
     }catch(e){
-        console.error("Error while fetching invoice based on userId : ", e);
         res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
@@ -102,12 +98,12 @@ async function getInvoiceItemByInvoiceId(req,res){
             {
                 res.json({
                     success : false,
-                    message : "No Invoice Item with this Invoice ID!"
+                    message : "Tidak ada invoice item dengan invoice ID ini!"
                 });
             }else{
                 res.json({
                     success : true,
-                    message : "Berhasil dapat data!",
+                    message : "Berhasil dapat data invoice item dengan invoice ID ini!",
                     invoice_id : invoiceItem[0].invoice_id,
                     invoice_date : invoiceItem[0].invoice_date,
                     due_date : invoiceItem[0].due_date,
@@ -125,7 +121,6 @@ async function getInvoiceItemByInvoiceId(req,res){
                 });
             }
     }catch(e){
-        console.error("Error while fetching invoice : ", e);
         res.status(500).json({ success : false, message : `Interval Server Error : ${e}`});
     }
 };
@@ -138,17 +133,16 @@ async function getInvoiceByType(req,res){
         if(invoiceType.length == 0){
             res.json({
                 success : false,
-                message : "No Invoice with Piutang Type!"
+                message : "Tidak ada invoice dengan tipe piutang!"
             });
         }else{
             res.json({
                 success : true,
-                message : "Berhasil dapat data!",
+                message : "Berhasil dapat data invoice dengan tipe piutang!",
                 invoice : invoiceType
             });
         }
     }catch(e){
-        console.error("Error while fetching invoices data : ", e);
         res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
@@ -159,10 +153,9 @@ async function updateCustByInvoiceId(req, res){
         const { customerId, invoiceId } = req.body;
 
         await invoiceModel.updateCustByInvoiceId(customerId, invoiceId);
-        res.status(201).json({ success : true, message : "Customer ID has been updated!"});
+        res.status(201).json({ success : true, message : "Customer ID berhasil diubah!"});
     }catch(e){
-        console.error("Error while updating customer id on invoice : ", e);
-        res.status(500).json({ success : false, message : `${e}`});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
 

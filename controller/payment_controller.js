@@ -12,12 +12,12 @@ async function getPayment(req,res){
         if(payment.length == 0){
             res.json({
                 success : false,
-                message : "No Timeline Payment!"
+                message : "Tidak ada timeline pembayaran!"
             });
         }else{
             res.json({
                 success : true,
-                message : "Berhasil dapat data!",
+                message : "Berhasil dapat data pembayaran!",
                 invoice_id : payment[0].invoice_id,
                 transaction_date : payment[0].invoice_date,
                 total_price : payment[0].total_price,
@@ -30,7 +30,6 @@ async function getPayment(req,res){
             });
         }
     }catch(e){
-        console.error('Error while fetching product expired : ', e);
         res.status(500).json({ success : false, message : `Internal Sever Error : ${e}`});
     }
 };
@@ -45,14 +44,13 @@ async function addTimelinePayment(req,res){
         if(timeline === false){
             res.json({
                 success : false,
-                message : "Cannot add timeline payment because amount paid bigger than total price!"
+                message : "Tidak bisa menambahkan data waktu pembayaran karena total pembayaran lebih besar dari total harga!"
             });
         }else{
-            res.status(201).json({ success : true,  mesagge : "New Timeline payment has been added!"});
+            res.status(201).json({ success : true,  mesagge : "Waktu pembayaran berhasil ditambahkan!"});
         }
     }catch(e){
-        console.error("Error while adding new timeline payment : ", e);
-        res.status(500).json({ success : false, message : `${e}`});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
 
