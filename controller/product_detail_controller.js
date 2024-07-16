@@ -7,9 +7,12 @@ async function getAllProductDetail(req,res){
 
         const productDetails = await productDetailModel.getAllProductDetail(productId);
 
-        if(productDetails.length == 0){
+        if(productDetails.length == undefined){
             res.json({
-                success : false,
+                success : true,
+                product_id : productDetails.product_id,
+                product_name : productDetails.product_name,
+                product_pic : productDetails.product_pic,
                 message : "Tidak ada varian produk!"
             })
         }else{

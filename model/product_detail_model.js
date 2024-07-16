@@ -2,19 +2,67 @@ const pool = require('../db/index');
 
 // * Read All product-detail
 async function getAllProductDetail(productId){
-    const query = `SELECT p.product_id, p.product_name, p.product_pic, pd.product_detail_id,
-	    pd.product_detail_pic, pd.product_detail_name, pd.price
-	    FROM product_detail pd 
-	    JOIN products p ON pd.product_id = p.product_id
-	    WHERE pd.product_id = $1
-	`;
+    try{
+        // * Begin Transaction
+        await pool.query('BEGIN');
 
-    const values = [ productId ];
+        const query = `
+            SELECT 
+                p.product_id, p.product_name, p.product_pic, pd.product_detail_id,
+                pd.product_detail_pic, pd.product_detail_name, pd.price
+            FROM product_detail pd 
+            JOIN products p ON pd.product_id = p.product_id
+            WHERE pd.product_id = $1
+        `;
 
-    const result = await pool.query(query, values);
+        const values = [ productId ];
 
-    return result.rows;
+        const result = await pool.query(query, values);
+
+        // * Jika tidak ada produk detail maka hanya menampilkan produk saja
+        if(result.rows.length == 0){
+            const queryGet = `
+                SELECT product_id, product_name, product_pic 
+                FROM products 
+                WHERE product_id = $1
+            `;
+
+            const valuesGet = [productId];
+
+            const resultGet = await pool.query(queryGet, valuesGet);
+
+            console.log(resultGet.rows[0].product_id);
+            return {
+                product_id : resultGet.rows[0].product_id,
+                product_name : resultGet.rows[0].product_name,
+                product_pic : resultGet.rows[0].product_pic
+            };
+        }
+        // * Commit Transaction
+        await pool.query('COMMIT');
+
+        return result.rows;
+    }catch(e){
+        // * Rollback Transaction
+        await pool.query('ROLLBACK');
+        throw e;
+    }
 };
+
+// async function getAllProductDetail(productId){
+//     const query = `SELECT p.product_id, p.product_name, p.product_pic, pd.product_detail_id,
+// 	    pd.product_detail_pic, pd.product_detail_name, pd.price
+// 	    FROM product_detail pd 
+// 	    JOIN products p ON pd.product_id = p.product_id
+// 	    WHERE pd.product_id = $1
+// 	`;
+
+//     const values = [ productId ];
+
+//     const result = await pool.query(query, values);
+
+//     return result.rows;
+// };
 
 // * Add product detail
 async function addProductDetail(productId, productDetailPic, productDetailName, price){

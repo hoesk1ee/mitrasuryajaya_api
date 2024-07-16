@@ -2,17 +2,62 @@ const pool = require('../db/index');
 
 // * Read all product
 async function getAllProduct(categoryId){
-    const query = `
-        SELECT p.product_id, c.category_name, p.product_pic, p.product_name
-        FROM products p JOIN category c ON p.category_id = c.category_id
-        WHERE p.category_id = $1`;
+    try{
+        // * Begin Transaction
+        await pool.query('BEGIN');
+
+        const query = `
+            SELECT p.product_id, c.category_name, p.category_id, p.product_pic, p.product_name
+            FROM products p JOIN category c ON p.category_id = c.category_id
+            WHERE p.category_id = $1
+        `;
 
         const values = [categoryId];
-    
+        
         const result = await pool.query(query, values);
 
+        // * Jika tidak ada produk di kategori ID yang dipilih maka tampilkan kategori saja
+        if(result.rows.length == 0){
+            const queryGet = `
+                SELECT category_id, category_name FROM category WHERE category_id = $1
+            `;
+
+            const valuesGet = [categoryId];
+
+            const resultGet = await pool.query(queryGet, valuesGet);
+
+            return {
+                category_id : resultGet.rows[0].category_id,
+                category_name : resultGet.rows[0].category_name
+            };
+
+        }
+        // * Commit Transaction
+        await pool.query('COMMIT');
+
         return result.rows;
+
+    }catch(e){
+        // * Rollback Transaction
+        await pool.query('ROLLBACK');
+        throw e;
+    }
+
 };
+
+// async function getAllProduct(categoryId){
+//     const query = `
+//         SELECT p.product_id, c.category_name, p.category_id, p.product_pic, p.product_name
+//         FROM products p JOIN category c ON p.category_id = c.category_id
+//         WHERE p.category_id = $1
+//     `;
+
+//     const values = [categoryId];
+    
+//     const result = await pool.query(query, values);
+
+//     return result.rows;
+// };
 
 // * Add new product to database
 async function addProduct(categoryId, productPic, productName){

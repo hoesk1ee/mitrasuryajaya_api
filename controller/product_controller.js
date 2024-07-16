@@ -7,16 +7,21 @@ async function getAllProduct(req, res){
 
         const products = await productModel.getAllProduct(categoryId);
         
-        if( products.length == 0 ){
+        if(products.length == undefined){
             res.json({
-                success : false,
+                success : true,
+                category_id : products.category_id,
+                category_name : products.category_name,
                 message : "Tidak ada produk di kategori ini"
             });
         }else{
             res.json({
                 success : true,
                 message : "Berhasil dapat data produk!",
-                products : products
+                category_id : products[0].category_id,
+                category_name : products[0].category_name,
+                products : products.map(({product_id, product_pic, product_name}) => 
+                    ({product_id, product_pic, product_name}))
             });
         }
         
