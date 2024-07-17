@@ -12,7 +12,7 @@ async function getAllInvoice(){
         LEFT JOIN customers c ON i.customer_id = c.customer_id
         LEFT JOIN invoice_item ii ON i.invoice_id = ii.invoice_id
 		JOIN users u ON i.user_id = u.user_id
-        GROUP BY i.invoice_id, c.customer_id, u.user_id
+        GROUP BY i.invoice_id, c.customer_id, u.user_id, u.user_name
     `;
     const result = await pool.query(query);
     
@@ -20,12 +20,42 @@ async function getAllInvoice(){
 };
 
 // * Add invoice, after success delete product from cart
-async function addInvoice(customerId, invoiceType, totalPrice, userId){
+async function addInvoice(product_exp_id, customerId, invoiceType, totalPrice, userId, transactionType, note){
     try{
         // * Begin transaction
         await pool.query('BEGIN');
 
-        // * Insert to table invoice
+        // * Update quantity in product exp
+        const queryUpdateQuantity = `
+            UPDATE product_exp 
+            SET quantity = quantity - (SELECT quantity FROM cart WHERE product_exp_id = $1) 
+            WHERE product_exp_id = $2
+        `;
+
+        const valuesUpdateQuantity = [product_exp_id, product_exp_id];
+
+        const resultUpdateQuantity = await pool.query(queryUpdateQuantity, valuesUpdateQuantity);
+
+        // * Insert to Product Transaction
+        const queryInsertTransaction = `
+            INSERT INTO product_transaction(product_exp_id, transaction_type, quantity, note)
+            SELECT
+                product_exp_id, $1, quantity, $2 
+            FROM
+                cart
+            WHERE user_id = $3
+        `;
+
+        const valuesInsertTransaction = [transactionType, note, userId];
+
+        await pool.query(queryInsertTransaction, valuesInsertTransaction);
+
+        // * Check if update was success
+        if(resultUpdateQuantity.rowCount === 0){
+            throw new Error('Update failed');
+        }
+
+        // * After update success, insert to table invoice
         const queryInsertInvoice = `
             INSERT INTO invoice(customer_id, due_date, invoice_type, total_price, user_id)
                 VALUES (
@@ -52,7 +82,7 @@ async function addInvoice(customerId, invoiceType, totalPrice, userId){
                 FROM 
                     cart
                 WHERE
-                    user_id = $2;
+                    user_id = $2
         `;
 
         const insertItemValues = [insertInvoice.rows[0].invoice_id, userId];
