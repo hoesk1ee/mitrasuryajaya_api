@@ -9,15 +9,22 @@ async function getAllProductExp(req,res){
 
         const product_exp = await productExpModel.getAllProductExp(productDetailId);
 
-        if(product_exp.length == 0){
+        if(product_exp.length == undefined){
             res.json({
-                success : false,
+                success : true,
+                product_id : product_exp.product_id,
+                product_name : product_exp.product_name,
+                product_detail_pic : product_exp.product_detail_pic,
+                product_detail_name : product_exp.product_detail_name,
+                price : product_exp.price,
                 message : "Tidak ada produk kadaluwarsa!"
             });
         }else{
             res.json({
                 success : true,
                 message : "Berhasil dapat data produk kadaluwarsa!",
+                product_id : product_exp[0].product_id,
+                product_name : product_exp[0].product_name,
                 product_detail_pic : product_exp[0].product_detail_pic,
                 product_detail_name : product_exp[0].product_detail_name,
                 price : product_exp[0].price,

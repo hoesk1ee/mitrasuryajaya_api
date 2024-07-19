@@ -49,21 +49,6 @@ async function getAllProductDetail(productId){
     }
 };
 
-// async function getAllProductDetail(productId){
-//     const query = `SELECT p.product_id, p.product_name, p.product_pic, pd.product_detail_id,
-// 	    pd.product_detail_pic, pd.product_detail_name, pd.price
-// 	    FROM product_detail pd 
-// 	    JOIN products p ON pd.product_id = p.product_id
-// 	    WHERE pd.product_id = $1
-// 	`;
-
-//     const values = [ productId ];
-
-//     const result = await pool.query(query, values);
-
-//     return result.rows;
-// };
-
 // * Add product detail
 async function addProductDetail(productId, productDetailPic, productDetailName, price){
     const query = `
