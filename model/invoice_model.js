@@ -25,7 +25,7 @@ async function addInvoice(customerId, invoiceType, totalPrice, userId, transacti
         // * Begin transaction
         await pool.query('BEGIN');
 
-        // * After update success, insert to table invoice
+        // * Insert to table invoice
         const queryInsertInvoice = `
             INSERT INTO invoice(customer_id, due_date, invoice_type, total_price, user_id)
                 VALUES (
@@ -59,12 +59,11 @@ async function addInvoice(customerId, invoiceType, totalPrice, userId, transacti
         const insertItemValues = [insertInvoice.rows[0].invoice_id, userId];
 
         const resultItemValues =  await pool.query(queryInsertInvoiceItem, insertItemValues);
-        console.log(resultItemValues.rows);
-
-         // // * Check if update was success
-        // if(resultUpdateQuantity.rowCount === 0){
-        //     throw new Error('Update failed');
-        // }
+         
+        // * Check if insert was success
+        if(resultItemValues.rowCount === 0){
+            throw new Error('Invoice Item Gagal ditambahakan');
+        }
 
         // * Update quantity in product exp
         const queryUpdateQuantity = `
@@ -78,36 +77,34 @@ async function addInvoice(customerId, invoiceType, totalPrice, userId, transacti
 
         const valuesUpdateQuantity = [insertInvoice.rows[0].invoice_id];
 
-        const resultUpdateQuantity = await pool.query(queryUpdateQuantity, valuesUpdateQuantity);
-        console.log(resultUpdateQuantity.rows);
+        await pool.query(queryUpdateQuantity, valuesUpdateQuantity);
 
         // * Insert to Product Transaction
         const queryInsertTransaction = `
             INSERT INTO product_transaction(product_exp_id, transaction_type, quantity, note)
-            SELECT
-                product_exp_id, $1, quantity, $2 
-            FROM
-                invoice_item
-            WHERE invoice_id = $3
+                SELECT
+                    product_exp_id, $1, quantity, $2 
+                FROM
+                    invoice_item
+                WHERE invoice_id = $3
         `;
 
-        const valuesInsertTransaction = [transactionType, note, insertInvoice.rows[0].invoiceId];
+        const valuesInsertTransaction = [transactionType, note, insertInvoice.rows[0].invoice_id];
 
-        const resultInsertTransaction = await pool.query(queryInsertTransaction, valuesInsertTransaction);
-        console.log(resultInsertTransaction);
+        await pool.query(queryInsertTransaction, valuesInsertTransaction);
     
         // * Delete product from cart
         const queryDelete = `
-            DELETE FROM cart WHERE product_exp_id = (SELECT product_exp_id FROM invoice_item WHERE invoice_id = $1);
+            DELETE 
+            FROM cart c 
+                USING invoice_item ii 
+            WHERE c.product_exp_id = ii.product_exp_id
+                AND ii.invoice_id = $1
         `;
-        // const queryDelete = `
-        //     DELETE FROM cart WHERE user_id = $1;
-        // `;
     
-        const valueDelete = [insertInvoice.rows[0].invoiceId];
+        const valueDelete = [insertInvoice.rows[0].invoice_id];
     
-        const resultDelete = await pool.query(queryDelete, valueDelete);
-        console.log(resultDelete);
+        await pool.query(queryDelete, valueDelete);
     
         // * Commit transaction
         await pool.query('COMMIT');
