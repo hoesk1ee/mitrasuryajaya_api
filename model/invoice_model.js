@@ -147,7 +147,7 @@ async function getInvoiceByCustomerId(customerId){
             LEFT JOIN invoice_item ii ON i.invoice_id = ii.invoice_id
             JOIN users u ON i.user_id = u.user_id
             WHERE i.customer_id = $1
-            GROUP BY i.invoice_id, c.customer_id, u.user_id
+            GROUP BY i.invoice_id, c.customer_id, u.user_id, u.user_name
         `;
 
         const valuesGetInvoice = [customerId];
