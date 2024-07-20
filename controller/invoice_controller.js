@@ -41,10 +41,17 @@ async function getInvoiceByCustomerId(req,res){
 
         const invoice = await invoiceModel.getInvoiceByCustomerId(customerId);
 
-        if(invoice.length == 0){
+        console.log(invoice.listInvoice);
+        if(invoice.listInvoice == null){
             res.json({
-                success : false,
-                message : "Tidak ada invoice dengan customer ID ini!"
+                success : true,
+                message : "Tidak ada invoice dengan customer ID ini!",
+                customer_id : invoice.customer_id,
+                customer_name : invoice.customer_name,
+                customer_phone : invoice.customer_phone,
+                customer_address : invoice.customer_address,
+                total_bill : invoice.total_bill,
+                invoice: invoice.listInvoice
             });
         }else{
             res.json({

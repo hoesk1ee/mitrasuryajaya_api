@@ -125,7 +125,9 @@ async function getInvoiceByCustomerId(customerId){
         const queryGetCustomer = 
             `SELECT 
                 c.customer_id, c.customer_name, c.customer_phone, c.customer_address,
-                SUM(COALESCE((i.total_price - (SELECT SUM(amount_paid) AS total_payment FROM payments WHERE invoice_id = i.invoice_id)), 0)) AS total_bill
+                SUM(COALESCE(
+						(COALESCE(i.total_price, 0) - COALESCE((SELECT SUM(amount_paid) AS total_payment FROM payments WHERE invoice_id = i.invoice_id), 0))
+				, 0)) AS total_bill
             FROM customers c 
             LEFT JOIN invoice i ON c.customer_id = i.customer_id
             WHERE c.customer_id = $1
@@ -135,6 +137,10 @@ async function getInvoiceByCustomerId(customerId){
         const valuesGetCustomer = [customerId];
 
         const resultGetCustomer = await pool.query(queryGetCustomer,valuesGetCustomer);
+
+        if(resultGetCustomer.rowCount == 0){
+            throw new Error('Customer ID tidak ada');
+        }
 
         // * Get Invoice based on Customer ID
         const queryGetInvoice = 
@@ -157,14 +163,25 @@ async function getInvoiceByCustomerId(customerId){
         // * Commint Transaction
         await pool.query('COMMIT');
 
-        return  { 
-            customer_id: resultGetCustomer.rows[0].customer_id,
-            customer_name : resultGetCustomer.rows[0].customer_name,
-            customer_phone : resultGetCustomer.rows[0].customer_phone,
-            customer_address : resultGetCustomer.rows[0].customer_address,
-            total_bill : resultGetCustomer.rows[0].total_bill, 
-            listInvoice : resultGetInvoice.rows
-        };
+        if(resultGetInvoice.rowCount == 0){
+            return  { 
+                customer_id: resultGetCustomer.rows[0].customer_id,
+                customer_name : resultGetCustomer.rows[0].customer_name,
+                customer_phone : resultGetCustomer.rows[0].customer_phone,
+                customer_address : resultGetCustomer.rows[0].customer_address,
+                total_bill : resultGetCustomer.rows[0].total_bill, 
+                listInvoice : null
+            };
+        } else{
+            return  { 
+                customer_id: resultGetCustomer.rows[0].customer_id,
+                customer_name : resultGetCustomer.rows[0].customer_name,
+                customer_phone : resultGetCustomer.rows[0].customer_phone,
+                customer_address : resultGetCustomer.rows[0].customer_address,
+                total_bill : resultGetCustomer.rows[0].total_bill, 
+                listInvoice : resultGetInvoice.rows
+            };
+        }
     }catch(e){
         // * Rollback Transacion if error
         await pool.query('ROLLBACK');
