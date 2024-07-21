@@ -45,20 +45,6 @@ async function getAllProduct(categoryId){
 
 };
 
-// async function getAllProduct(categoryId){
-//     const query = `
-//         SELECT p.product_id, c.category_name, p.category_id, p.product_pic, p.product_name
-//         FROM products p JOIN category c ON p.category_id = c.category_id
-//         WHERE p.category_id = $1
-//     `;
-
-//     const values = [categoryId];
-    
-//     const result = await pool.query(query, values);
-
-//     return result.rows;
-// };
-
 // * Add new product to database
 async function addProduct(categoryId, productPic, productName){
     const query = ` 
@@ -85,14 +71,12 @@ async function updateProduct(productId, categoryId, productPic, productName){
 
     const values = [];
     let valueIndex = 1;
-    // let valueIndex2 = 2;
     let fieldsToUpdate = 0;
 
     if(productPic !== undefined){
         query += ` product_pic = $${valueIndex}`;
         values.push(productPic);
         valueIndex++;
-        // valueIndex2++;
         fieldsToUpdate++;
     }
 
@@ -104,7 +88,6 @@ async function updateProduct(productId, categoryId, productPic, productName){
         query += ` product_name = $${valueIndex}`;
         values.push(productName);
         valueIndex++;
-        // valueIndex2++;
         fieldsToUpdate++;
     }
 

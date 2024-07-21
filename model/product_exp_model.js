@@ -4,18 +4,18 @@ const pool = require('../db/index');
 async function getAllProductExp(productDetailId){
     try{
         const query = `
-        SELECT 
-            pd.product_id, p.product_name, pd.product_detail_pic, pd.product_detail_name, pd.price, pe.product_detail_id, pe.exp_date, pe.quantity, pe.product_barcode 
-        FROM product_exp pe 
-        JOIN product_detail pd ON pe.product_detail_id = pd.product_detail_id
-		JOIN products p ON pd.product_id = p.product_id
-        WHERE pe.product_detail_id = $1 AND is_deleted = false`;
+            SELECT 
+                pd.product_id, p.product_name, pd.product_detail_pic, pd.product_detail_name, pd.price, pe.product_detail_id, pe.exp_date, pe.quantity, pe.product_barcode 
+            FROM product_exp pe 
+            JOIN product_detail pd ON pe.product_detail_id = pd.product_detail_id
+            JOIN products p ON pd.product_id = p.product_id
+            WHERE pe.product_detail_id = $1 AND is_deleted = false
+        `;
 
         const values = [productDetailId];
 
         const result = await pool.query(query, values);
 
-        // return result.rows;
         // * Jika tidak ada produk exp maka hanya menampilkan produk detail saja
         if(result.rows.length == 0){
             const queryGet = `

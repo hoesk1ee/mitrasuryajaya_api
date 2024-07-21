@@ -31,7 +31,6 @@ async function getAllProductDetail(productId){
 
             const resultGet = await pool.query(queryGet, valuesGet);
 
-            console.log(resultGet.rows[0].product_id);
             return {
                 product_id : resultGet.rows[0].product_id,
                 product_name : resultGet.rows[0].product_name,

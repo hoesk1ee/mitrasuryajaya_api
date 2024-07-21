@@ -41,7 +41,6 @@ async function addInvoice(customerId, invoiceType, totalPrice, userId, transacti
         const valuesInsert = [customerId, invoiceType, totalPrice, userId];
 
         const insertInvoice = await pool.query(queryInsertInvoice, valuesInsert);
-        console.log(insertInvoice.rows);
         
         // * Insert to Invoice Item
         const queryInsertInvoiceItem = `
@@ -118,7 +117,7 @@ async function addInvoice(customerId, invoiceType, totalPrice, userId, transacti
 // * Read Invoice By customer_id
 async function getInvoiceByCustomerId(customerId){
     try{
-        // Begin Transaction
+        // * Begin Transaction
         await pool.query('BEGIN');
 
         // * Get Customer based on Customer ID
