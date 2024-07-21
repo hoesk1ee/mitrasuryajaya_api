@@ -41,7 +41,6 @@ async function getInvoiceByCustomerId(req,res){
 
         const invoice = await invoiceModel.getInvoiceByCustomerId(customerId);
 
-        console.log(invoice.listInvoice);
         if(invoice.listInvoice == null){
             res.json({
                 success : true,
@@ -51,7 +50,6 @@ async function getInvoiceByCustomerId(req,res){
                 customer_phone : invoice.customer_phone,
                 customer_address : invoice.customer_address,
                 total_bill : invoice.total_bill,
-                invoice: invoice.listInvoice
             });
         }else{
             res.json({
