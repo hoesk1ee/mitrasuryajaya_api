@@ -144,10 +144,11 @@ async function getInvoiceByCustomerId(customerId){
 
         // * Get Invoice based on Customer ID
         const queryGetInvoice = 
-            `SELECT 
+            `
+            SELECT 
                 i.invoice_id, i.invoice_date, i.due_date, i.invoice_type, i.total_price, i.user_id,
                 u.user_name, SUM(ii.quantity) AS total_item,
-                (SELECT SUM(amount_paid) AS total_payment FROM payments WHERE invoice_id = i.invoice_id)
+                COALESCE((SELECT SUM(amount_paid) FROM payments WHERE invoice_id = i.invoice_id), 0) AS total_payment
             FROM invoice i 
             LEFT JOIN customers c ON i.customer_id = c.customer_id
             LEFT JOIN invoice_item ii ON i.invoice_id = ii.invoice_id
