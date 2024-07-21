@@ -6,8 +6,8 @@ async function getAllInvoice(){
         SELECT 
             i.invoice_id, i.invoice_date, i.due_date, i.invoice_type, i.total_price, i.user_id,
             u.user_name, i.customer_id, c.customer_name, 
-            SUM(ii.quantity) AS total_item,
-	        (SELECT SUM(amount_paid) AS total_payment FROM payments WHERE invoice_id = i.invoice_id)
+            COALESCE(SUM(ii.quantity),0) AS total_item,
+	        (SELECT COALESCE(SUM(amount_paid),0) AS total_payment FROM payments WHERE invoice_id = i.invoice_id)
         FROM invoice i 
         LEFT JOIN customers c ON i.customer_id = c.customer_id
         LEFT JOIN invoice_item ii ON i.invoice_id = ii.invoice_id
@@ -147,7 +147,7 @@ async function getInvoiceByCustomerId(customerId){
             `
             SELECT 
                 i.invoice_id, i.invoice_date, i.due_date, i.invoice_type, i.total_price, i.user_id,
-                u.user_name, SUM(ii.quantity) AS total_item,
+                u.user_name, COALESCE(SUM(ii.quantity),0) AS total_item,
                 COALESCE((SELECT SUM(amount_paid) FROM payments WHERE invoice_id = i.invoice_id), 0) AS total_payment
             FROM invoice i 
             LEFT JOIN customers c ON i.customer_id = c.customer_id
@@ -205,7 +205,7 @@ async function getInvoiceItemByInvoiceId(invoiceId){
     const query = `
         SELECT ii.*, i.*, pd.*,
             c.customer_name, u.user_name, p.product_name, pd.price,
-            (SELECT SUM(amount_paid) AS total_payment FROM payments WHERE invoice_id = ii.invoice_id) 
+            COALESCE((SELECT SUM(amount_paid) FROM payments WHERE invoice_id = ii.invoice_id),0) AS total_payment 
         FROM invoice_item ii 
         JOIN invoice i ON ii.invoice_id = i.invoice_id
         LEFT JOIN customers c ON i.customer_id = c.customer_id

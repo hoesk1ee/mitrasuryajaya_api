@@ -3,13 +3,14 @@ const pool = require('../db/index');
 // * Read all payment
 async function getPayment(invoiceId){
     const query = `
-            SELECT 
-                p.invoice_id, i.invoice_date, i.total_price, p.payment_date, p.amount_paid, p.note,
-				c.customer_phone, c.customer_name, 
-                (SELECT SUM(amount_paid) AS total_amount_paid FROM payments WHERE invoice_id = $1) AS total_payment
-            FROM payments p JOIN invoice i ON p.invoice_id = i.invoice_id
-		    JOIN customers c ON i.customer_id = c.customer_id
-            WHERE p.invoice_id = $2`;
+        SELECT 
+            p.invoice_id, i.invoice_date, i.total_price, p.payment_date, p.amount_paid, p.note,
+			c.customer_phone, c.customer_name, 
+            COALESCE((SELECT SUM(amount_paid) AS total_amount_paid FROM payments WHERE invoice_id = $1), 0) AS total_payment
+        FROM payments p JOIN invoice i ON p.invoice_id = i.invoice_id
+		JOIN customers c ON i.customer_id = c.customer_id
+        WHERE p.invoice_id = $2
+    `;
     
     const values = [invoiceId, invoiceId];
 
