@@ -170,7 +170,6 @@ async function getInvoiceByCustomerId(customerId){
                 customer_phone : resultGetCustomer.rows[0].customer_phone,
                 customer_address : resultGetCustomer.rows[0].customer_address,
                 total_bill : resultGetCustomer.rows[0].total_bill, 
-                listInvoice : null
             };
         } else{
             return  { 
