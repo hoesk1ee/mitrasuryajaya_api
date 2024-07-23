@@ -3,6 +3,9 @@ const pool = require('../db/index');
 // * Read all product exp
 async function getAllProductExp(productDetailId){
     try{
+        // * Begin Transaction
+        await pool.query('BEGIN');
+        
         const query = `
             SELECT 
                 pd.product_id, p.product_name, pd.product_detail_pic, pd.product_detail_name, pd.price, pe.product_detail_id, pe.exp_date, pe.quantity, pe.product_barcode 

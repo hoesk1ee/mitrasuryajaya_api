@@ -9,10 +9,17 @@ async function getPayment(req,res){
 
         const payment = await paymentModel.getPayment(invoiceId);
         
-        if(payment.length == 0){
+        if(payment.length == undefined){
             res.json({
-                success : false,
-                message : "Tidak ada timeline pembayaran!"
+                success : true,
+                message : "Tidak ada timeline pembayaran!",
+                invoice_id : payment.invoice_id,
+                transaction_date : payment.invoice_date,
+                due_date : payment.due_date,
+                total_price : payment.total_price,
+                total_payment : payment.total_payment,
+                customer_name : payment.customer_name,
+                customer_phone : payment.customer_phone
             });
         }else{
             res.json({
@@ -20,6 +27,7 @@ async function getPayment(req,res){
                 message : "Berhasil dapat data pembayaran!",
                 invoice_id : payment[0].invoice_id,
                 transaction_date : payment[0].invoice_date,
+                due_date : payment[0].due_date,
                 total_price : payment[0].total_price,
                 total_payment : payment[0].total_payment,
                 customer_name : payment[0].customer_name,
