@@ -55,7 +55,7 @@ async function addTimelinePayment(req,res){
                 message : "Tidak bisa menambahkan data waktu pembayaran karena total pembayaran lebih besar dari total harga!"
             });
         }else{
-            res.status(201).json({ success : true,  mesagge : "Waktu pembayaran berhasil ditambahkan!"});
+            res.status(201).json({ success : true,  message : "Waktu pembayaran berhasil ditambahkan!"});
         }
     }catch(e){
         res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
