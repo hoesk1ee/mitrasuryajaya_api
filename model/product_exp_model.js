@@ -68,34 +68,44 @@ async function addProductExp(productDetailId, expDate, quantity, productBarcode)
 };
 
 // * Delete product expired based on product_exp_id
-async function deleteProductExp(quantity, productExpId, transactionType, note){
+async function deleteProductExp(productExpId, note){
     try{
         // * Begin transaction
         await pool.query('BEGIN');
 
-        // * Delete product_exp
-        const queryDelete = `
-            UPDATE product_exp 
-            SET quantity = quantity - $1, is_deleted = true
-            WHERE product_exp_id = $2
+        // * Ambil Nilai quantity dari product_exp sebelum di hapus
+        const queryQuantity = `
+            SELECT quantity
+            FROM product_exp WHERE product_exp_id = $1;
         `;
 
-        const valuesDelete = [quantity, productExpId];
+        const valuesQuantity = [productExpId];
 
-        const result = await pool.query(queryDelete, valuesDelete);
+        const resultQuantity = await pool.query(queryQuantity, valuesQuantity);
+
+        // * Hapus product_exp, set quantity menjadi 0
+        const queryDelete = `
+            UPDATE product_exp 
+            SET quantity = 0, is_deleted = true
+            WHERE product_exp_id = $1
+        `;
+
+        const valuesDelete = [productExpId];
+
+        const resultDelete = await pool.query(queryDelete, valuesDelete);
 
         // * Check if delete was success
-        if(result.rowCount === 0 ){
-            throw new Error('Delete failed');
+        if(resultDelete.rowCount === 0 ){
+            throw new Error('Hapus product exp tidak berhasil');
         }
 
         // * After success delete product_exp, insert into product_transaction
         const queryInsert = `
             INSERT INTO product_transaction(product_exp_id, transaction_type, quantity, note)
-            VALUES ($1, $2, $3, $4)
+            VALUES ($1, 'Hapus', $2, $3)
         `;
 
-        const valuesInsert = [productExpId, transactionType, quantity, note];
+        const valuesInsert = [productExpId, resultQuantity.rows[0].quantity, note];
 
         await pool.query(queryInsert, valuesInsert);
 

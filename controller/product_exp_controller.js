@@ -56,9 +56,9 @@ async function addProductExp(req,res){
 // * Controller to delete product expired based on product_exp_id
 async function deleteProductExp(req,res){
     try{
-        const { quantity, productExpId, transactionType, note } = req.body;
+        const { productExpId, note } = req.body;
 
-        await productExpModel.deleteProductExp(quantity, productExpId, transactionType, note);
+        await productExpModel.deleteProductExp(productExpId, note);
 
         res.status(201).json({ success : true, message : "Produk kadaluwarsa berhasil dihapus!"});
     } catch(e){
