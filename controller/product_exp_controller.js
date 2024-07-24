@@ -63,18 +63,18 @@ async function deleteProductExp(req,res){
 
         res.status(201).json({ success : true, message : "Produk kadaluwarsa berhasil dihapus!"});
     } catch(e){
-        res.status(500).json({ success : false, messagge : `Internal Server Error : ${e}`});
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
 
 // * Controller to update product expired based on product_exp_id
 async function updateProductExp(req,res){
     try{
-        const { quantity, productExpId, transactionType, note } = req.body;
+        const { quantity, productExpId, note} = req.body;
 
-        await productExpModel.updateProductExp(quantity, productExpId, transactionType, note);
+        await productExpModel.updateProductExp(quantity, productExpId, note);
 
-        res.status(201).json({ success: true, message : "Stok berhasil ditambahkan"});
+        res.status(201).json({ success: true, message : "Stok berhasil diubah"});
     }catch(e){
         res.status(500).json({ success : false, message :`Internal Server Error : ${e}`});
     }

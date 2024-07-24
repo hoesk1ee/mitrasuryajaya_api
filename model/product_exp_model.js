@@ -119,35 +119,66 @@ async function deleteProductExp(productExpId, note){
 };
 
 // * Update product expired based on product_exp_id
-async function updateProductExp(quantity, productExpId, transactionType, note){
+async function updateProductExp(quantity, productExpId, note){
     try{
         // * Begin Transaction
         await pool.query('BEGIN');
-        
+
+        // * Ambil Nilai quantity yang sekarang
+        const queryQuantity = `
+            SELECT 	quantity FROM product_exp WHERE product_exp_id = $1
+        `;
+
+        const valuesQuantity = [productExpId];
+
+        const resultQuantity = await pool.query(queryQuantity,valuesQuantity);
+
         // * Update to add stock in product_exp
         const queryUpdate = `
-            UPDATE product_exp SET quantity = quantity + $1
+            UPDATE product_exp SET quantity = $1
             WHERE product_exp_id = $2
+            RETURNING quantity
         `;
 
         const valuesUpdate = [quantity, productExpId];
 
-        const result = await pool.query(queryUpdate, valuesUpdate);
+        const resultUpdate = await pool.query(queryUpdate, valuesUpdate);
 
         // * Check if update was success
-        if(result.rowCount === 0){
+        if(resultUpdate.rowCount === 0){
             throw new Error('Update failed');
         }
+        
+        // * Cek quantity yang dimasukkan
+        if(resultQuantity.rows[0].quantity < resultUpdate.rows[0].quantity){
+            // * Perhitungan Quantity sekarang dan quantity yang dimasukkan
+            const quantityTambah = resultUpdate.rows[0].quantity - resultQuantity.rows[0].quantity;
 
-        // * After update success, insert into product_transaction
-        const queryInsert = `
-            INSERT INTO product_transaction(product_exp_id, transaction_type, quantity, note)
-            VALUES ($1, $2, $3, $4)
-        `;
+            // * Jika quantity sekarang lebih kecil dari quantity yang dimasukkan, insert ke product_transaction dengan transaction_type 'Tambah'
+            const queryInsert = `
+                INSERT INTO product_transaction(product_exp_id, transaction_type, quantity, note)
+                VALUES ($1, 'Tambah', $2, $3)
+            `;
 
-        const valuesInsert = [productExpId, transactionType, quantity, note];
+            const valuesInsert = [productExpId, quantityTambah, note];
 
-        await pool.query(queryInsert, valuesInsert);
+            await pool.query(queryInsert, valuesInsert);
+            console.log(quantityTambah);
+
+        }else if(resultQuantity.rows[0].quantity > resultUpdate.rows[0].quantity){
+            // * Perhitungan Quantity sekarang dan quantity yang dimasukkan
+            const quantityKurang = resultQuantity.rows[0].quantity - resultUpdate.rows[0].quantity;
+
+            // * Jika quantity sekarang lebih besar dari quantity yang dimasukkan, insert ke product_transaction dengan transaction_type 'Kurang'
+            const queryInsert = `
+                INSERT INTO product_transaction(product_exp_id, transaction_type, quantity, note)
+                VALUES ($1, 'Kurang', $2, $3)
+            `;
+
+            const valuesInsert = [productExpId, quantityKurang, note];
+
+            await pool.query(queryInsert, valuesInsert);
+        }
 
         // * Commit transaction
         await pool.query('COMMIT');
