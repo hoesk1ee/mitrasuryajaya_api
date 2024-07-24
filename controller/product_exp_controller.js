@@ -28,7 +28,8 @@ async function getAllProductExp(req,res){
                 product_detail_pic : product_exp[0].product_detail_pic,
                 product_detail_name : product_exp[0].product_detail_name,
                 price : product_exp[0].price,
-                product_data : product_exp.map(({exp_date, quantity, product_barcode}) => ({
+                product_data : product_exp.map(({product_exp_id, exp_date, quantity, product_barcode}) => ({
+                    product_exp_id,
                     exp_date : moment(exp_date).locale('id').format('DD MMMM YYYY'), 
                     quantity, 
                     product_barcode
