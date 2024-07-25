@@ -37,6 +37,7 @@ async function getAllProductExp(productDetailId){
             return{
                 product_id : resultGet.rows[0].product_id,
                 product_name : resultGet.rows[0].product_name,
+                product_detail_id : resultGet.rows[0].product_detail_id,
                 product_detail_pic : resultGet.rows[0].product_detail_pic,
                 product_detail_name : resultGet.rows[0].product_detail_name,
                 price : resultGet.rows[0].price
