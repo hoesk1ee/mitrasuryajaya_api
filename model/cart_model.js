@@ -21,19 +21,61 @@ async function getAllCart(userId){
 
 // * Add new cart
 async function addCart(userId, productBarcode){
-    const query = `
-        INSERT INTO cart(user_id, product_exp_id, quantity)
-        SELECT temp.user_id, pe.product_exp_id, temp.quantity
-        FROM (VALUES 
-            ($1, $2, 1)
-        ) AS
-        temp (user_id, product_barcode, quantity)
-        JOIN product_exp pe ON temp.product_barcode = pe.product_barcode
-    `;
+    try{
+        // * Begin Transaction
+        await pool.query('BEGIN');
 
-    const values = [userId, productBarcode];
+        // * Ambil Nilai product_barcode
+        const queryGetBarcode = `
+            SELECT 
+                pe.product_barcode FROM product_exp pe 
+            JOIN cart c ON pe.product_exp_id = c.product_exp_id
+            WHERE c.user_id = $1 and product_barcode = $2 
+        `;
 
-    await pool.query(query, values);
+        const valuseGetBarcode = [userId, productBarcode];
+
+        const resultGetBarcode = await pool.query(queryGetBarcode, valuseGetBarcode);
+
+        // * Cek product barcode, jika tidak ada maka tambahkan ke cart
+        if(resultGetBarcode.rowCount === 0){
+            const query = `
+                INSERT INTO cart(user_id, product_exp_id, quantity)
+                SELECT temp.user_id, pe.product_exp_id, temp.quantity
+                FROM (VALUES 
+                    ($1, $2, 1)
+                ) AS
+                temp (user_id, product_barcode, quantity)
+                JOIN product_exp pe ON temp.product_barcode = pe.product_barcode
+            `;
+
+            const values = [userId, productBarcode];
+
+            await pool.query(query, values);
+
+        }
+        // * Jika product barcode sudah ada maka quantity ditambah 1
+        else if(resultGetBarcode.rows[0].product_barcode === productBarcode){
+            const query = `
+                UPDATE cart c 
+                    SET quantity = c.quantity + 1 
+                FROM product_exp pe 
+                WHERE c.product_exp_id = pe.product_exp_id 
+                    AND c.user_id = $1 AND pe.product_barcode = $2
+            `;
+            
+            const values = [userId, productBarcode];
+
+            await pool.query(query, values);
+        }
+        // * Commit Transaction
+        await pool.query('COMMIT');
+    }catch(e){
+        // * Rollback Transaction if error
+        await pool.query('ROLLBACK');
+        throw e;
+    }
+    
 };
 
 // * Delete cart based on user_id and product_exp_id
