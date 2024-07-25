@@ -103,7 +103,7 @@ async function deleteProductExp(productExpId, note){
         // * After success delete product_exp, insert into product_transaction
         const queryInsert = `
             INSERT INTO product_transaction(product_exp_id, transaction_type, quantity, note)
-            VALUES ($1, 'Hapus', $2, $3)
+            VALUES ($1, 'Pengeluaran', $2, $3)
         `;
 
         const valuesInsert = [productExpId, resultQuantity.rows[0].quantity, note];
