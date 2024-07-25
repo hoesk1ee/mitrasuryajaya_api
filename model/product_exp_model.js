@@ -58,14 +58,43 @@ async function getAllProductExp(productDetailId){
 
 // * Add product expired
 async function addProductExp(productDetailId, expDate, quantity, productBarcode){
-    const query = `
-        INSERT INTO product_exp(product_detail_id, exp_date, quantity, product_barcode, is_deleted)
-        VALUES ($1, $2, $3, $4, false)
-    `;
+    try{
+        // * Begin Transaction
+        await pool.query('BEGIN');
 
-    const values = [ productDetailId, expDate, quantity, productBarcode ];
+        // * Insert to Product_exp
+        const query = `
+            INSERT INTO product_exp(product_detail_id, exp_date, quantity, product_barcode, is_deleted)
+            VALUES ($1, $2, $3, $4, false)
+            RETURNING product_exp_id, quantity
+        `;
 
-    await pool.query(query, values);
+        const values = [ productDetailId, expDate, quantity, productBarcode ];
+
+        const result = await pool.query(query, values);
+
+        // * Check insert ke tabel sukses atau tidak
+        if(result.rowCount == 0){
+            throw new Error('Product Expired Gagal Ditambahkan!');
+        }
+
+        // * Insert ke tabel product_transaction
+        const queryTransaction = `
+            INSERT INTO product_transaction(product_exp_id, transaction_type, quantity, note)
+            VALUES($1, 'Pemasukan', $2, 'Pemasukan Produk Baru')
+        `;
+
+        const valuesTransaction = [result.rows[0].product_exp_id, result.rows[0].quantity];
+
+        await pool.query(queryTransaction, valuesTransaction);
+
+        // * Commit Transaction
+        await pool.query('COMMIT');
+    }catch(e){
+        // * Rollback Transaction if error
+        await pool.query('ROLLBACK');
+        throw e;
+    }
 };
 
 // * Delete product expired based on product_exp_id
