@@ -20,7 +20,7 @@ async function getAllInvoice(){
 };
 
 // * Add invoice, after success delete product from cart
-async function addInvoice(customerId, invoiceType, totalPrice, userId, transactionType, note){
+async function addInvoice(customerId, invoiceType, totalPrice, userId, note){
     try{
         // * Begin transaction
         await pool.query('BEGIN');
@@ -82,13 +82,13 @@ async function addInvoice(customerId, invoiceType, totalPrice, userId, transacti
         const queryInsertTransaction = `
             INSERT INTO product_transaction(product_exp_id, transaction_type, quantity, note)
                 SELECT
-                    product_exp_id, $1, quantity, $2 
+                    product_exp_id, 'Penjualan', quantity, $1 
                 FROM
                     invoice_item
-                WHERE invoice_id = $3
+                WHERE invoice_id = $2
         `;
 
-        const valuesInsertTransaction = [transactionType, note, insertInvoice.rows[0].invoice_id];
+        const valuesInsertTransaction = [note, insertInvoice.rows[0].invoice_id];
 
         await pool.query(queryInsertTransaction, valuesInsertTransaction);
     
@@ -98,10 +98,10 @@ async function addInvoice(customerId, invoiceType, totalPrice, userId, transacti
             FROM cart c 
                 USING invoice_item ii 
             WHERE c.product_exp_id = ii.product_exp_id
-                AND ii.invoice_id = $1
+                AND ii.invoice_id = $1 AND user_id = $2
         `;
     
-        const valueDelete = [insertInvoice.rows[0].invoice_id];
+        const valueDelete = [insertInvoice.rows[0].invoice_id, userId];
     
         await pool.query(queryDelete, valueDelete);
     

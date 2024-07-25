@@ -25,9 +25,9 @@ async function getAllInvoice(req,res){
 // * Controller to add new invoice
 async function addInvoice(req,res){
     try{
-        const { customerId, invoiceType, totalPrice, userId, transactionType, note } = req.body;
+        const { customerId, invoiceType, totalPrice, userId,  note } = req.body;
 
-        await invoiceModel.addInvoice(customerId, invoiceType, totalPrice, userId, transactionType, note);
+        await invoiceModel.addInvoice(customerId, invoiceType, totalPrice, userId, note);
         res.status(201).json({ success : true, message : "Invoice baru berhasil ditambahkan!"});
     }catch(e){
         res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
