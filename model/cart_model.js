@@ -25,7 +25,23 @@ async function addCart(userId, productBarcode){
         // * Begin Transaction
         await pool.query('BEGIN');
 
-        // * Ambil Nilai product_barcode
+        // * Ambil nilai product barcode di product_exp
+        const queryCekBarcode = `
+            SELECT 
+                product_barcode FROM product_exp
+            WHERE product_barcode = $1
+        `;
+
+        const valuesCekBarcode = [productBarcode];
+
+        const resultCekBarcode = await pool.query(queryCekBarcode, valuesCekBarcode);
+
+        // * Cek apakah produck barcode ada atau tidak
+        if(resultCekBarcode.rowCount === 0){
+            return false
+        }
+        
+        // * Jika ada, ambil Nilai product_barcode pada cart
         const queryGetBarcode = `
             SELECT 
                 pe.product_barcode FROM product_exp pe 
@@ -47,12 +63,35 @@ async function addCart(userId, productBarcode){
                 ) AS
                 temp (user_id, product_barcode, quantity)
                 JOIN product_exp pe ON temp.product_barcode = pe.product_barcode
+                RETURNING product_exp_id
             `;
 
             const values = [userId, productBarcode];
 
-            await pool.query(query, values);
+            const result = await pool.query(query, values);
 
+            if(result.rowCount == 0){
+                throw new Error('Insert Failed');
+            }
+
+            // * Ambil nilai beberapa data untuk ditampilkan di layar
+            const queryGet = `
+                    SELECT pd.product_detail_pic, p.product_name, pd.product_detail_name,
+                        pd.price, pe.exp_date
+                    FROM product_exp pe 
+                    JOIN product_detail pd ON pe.product_detail_id = pd.product_detail_id
+                    JOIN products p ON pd.product_id = p.product_id
+                    WHERE pe.product_exp_id = $1
+            `;
+
+            const valuesGet = [result.rows[0].product_exp_id];
+
+            const resultGet = await pool.query(queryGet, valuesGet);
+                
+            // * Commit Transaction
+            await pool.query('COMMIT');
+                
+            return resultGet.rows;
         }
         // * Jika product barcode sudah ada maka quantity ditambah 1
         else if(resultGetBarcode.rows[0].product_barcode === productBarcode){
@@ -66,10 +105,36 @@ async function addCart(userId, productBarcode){
             
             const values = [userId, productBarcode];
 
-            await pool.query(query, values);
+            const result = await pool.query(query, values);
+            console.log(result.rowCount);
+
+            if(result.rowCount == 0){
+                throw new Error('Insert Failed');
+            }
+
+            // * Ambil nilai beberapa data untuk ditampilkan di layar
+            const queryGet = `
+                SELECT pd.product_detail_pic, p.product_name, pd.product_detail_name,
+                    pd.price, pe.exp_date
+                FROM product_exp pe 
+                JOIN product_detail pd ON pe.product_detail_id = pd.product_detail_id
+                JOIN products p ON pd.product_id = p.product_id
+                WHERE pe.product_barcode = $1
+            `;
+
+            const valuesGet = [productBarcode];
+            console.log(productBarcode);
+
+            const resultGet = await pool.query(queryGet, valuesGet);
+
+            // * Commit Transaction
+            await pool.query('COMMIT');
+
+            return resultGet.rows;
         }
-        // * Commit Transaction
-        await pool.query('COMMIT');
+        
+        // // * Commit Transaction
+        // await pool.query('COMMIT');
     }catch(e){
         // * Rollback Transaction if error
         await pool.query('ROLLBACK');

@@ -35,9 +35,23 @@ async function addCart(req,res){
     try{
         const { userId, productBarcode } = req.body;
 
-        await cartModel.addCart(userId, productBarcode);
+        const carts = await cartModel.addCart(userId, productBarcode);
 
-        res.status(201).json({ success : true, message : "Cart baru berhasil ditambahkan!"});
+        console.log(carts);
+
+        if(carts === false){
+            res.json({
+                success : false,
+                message : "Product Barcode tidak ditemukan!"
+            });
+        }else{
+            res.status(201).json({ 
+                success : true, 
+                message : "Cart baru berhasil ditambahkan!",
+                item_descriptions : carts
+            });
+        }
+
     }catch(e){
         res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
