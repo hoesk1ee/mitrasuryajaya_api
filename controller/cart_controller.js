@@ -37,8 +37,6 @@ async function addCart(req,res){
 
         const carts = await cartModel.addCart(userId, productBarcode);
 
-        console.log(carts);
-
         if(carts === false){
             res.json({
                 success : false,

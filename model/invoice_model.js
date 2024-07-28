@@ -104,9 +104,25 @@ async function addInvoice(customerId, invoiceType, totalPrice, userId, note){
         const valueDelete = [insertInvoice.rows[0].invoice_id, userId];
     
         await pool.query(queryDelete, valueDelete);
+
+        // * Ambil data-data untuk ditampilkan sebagai response
+        const queryGet = `
+            SELECT i.invoice_id, i.invoice_date, i.invoice_type, u.user_name,
+                COALESCE(SUM(ii.quantity),0) AS total_item, i.total_price
+                FROM invoice i JOIN invoice_item ii ON i.invoice_id = ii.invoice_id
+            JOIN users u ON i.user_id = u.user_id
+            WHERE i.invoice_id = $1
+            GROUP BY i.invoice_id, u.user_name
+        `;
+
+        const valuesGet = [insertInvoice.rows[0].invoice_id];
+
+        const resultGet = await pool.query(queryGet, valuesGet);
     
         // * Commit transaction
         await pool.query('COMMIT');
+
+        return resultGet.rows;
     }catch(e){
         // * Rollback transaction if error
         await pool.query('ROLLBACK');

@@ -106,7 +106,6 @@ async function addCart(userId, productBarcode){
             const values = [userId, productBarcode];
 
             const result = await pool.query(query, values);
-            console.log(result.rowCount);
 
             if(result.rowCount == 0){
                 throw new Error('Insert Failed');
@@ -123,7 +122,6 @@ async function addCart(userId, productBarcode){
             `;
 
             const valuesGet = [productBarcode];
-            console.log(productBarcode);
 
             const resultGet = await pool.query(queryGet, valuesGet);
 
@@ -132,9 +130,6 @@ async function addCart(userId, productBarcode){
 
             return resultGet.rows;
         }
-        
-        // // * Commit Transaction
-        // await pool.query('COMMIT');
     }catch(e){
         // * Rollback Transaction if error
         await pool.query('ROLLBACK');

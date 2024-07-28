@@ -27,8 +27,13 @@ async function addInvoice(req,res){
     try{
         const { customerId, invoiceType, totalPrice, userId,  note } = req.body;
 
-        await invoiceModel.addInvoice(customerId, invoiceType, totalPrice, userId, note);
-        res.status(201).json({ success : true, message : "Invoice baru berhasil ditambahkan!"});
+        const invoice = await invoiceModel.addInvoice(customerId, invoiceType, totalPrice, userId, note);
+        
+        res.status(201).json({ 
+            success : true, 
+            message : "Invoice baru berhasil ditambahkan!",
+            invoice_desc : invoice[0],
+        });
     }catch(e){
         res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
