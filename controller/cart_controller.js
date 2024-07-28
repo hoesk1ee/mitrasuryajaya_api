@@ -48,7 +48,7 @@ async function addCart(req,res){
             res.status(201).json({ 
                 success : true, 
                 message : "Cart baru berhasil ditambahkan!",
-                item_descriptions : carts
+                item_descriptions : carts[0],
             });
         }
 
