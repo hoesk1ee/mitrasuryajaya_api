@@ -125,8 +125,8 @@ async function getInvoiceItemByInvoiceId(req,res){
                     user_id : invoiceItem[0].user_id,
                     user_name : invoiceItem[0].user_name,
                     invoice_item : invoiceItem.map(
-                        ({invoice_item_id, product_exp_id, quantity, product_name, product_detail_id, product_detail_name, product_detail_pic, price}) =>
-                            ({invoice_item_id, product_exp_id, quantity, product_name, product_detail_id, product_detail_name, product_detail_pic, price})
+                        ({invoice_item_id, product_exp_id, quantity, product_name, product_detail_id, product_detail_name, product_detail_pic, price, exp_date}) =>
+                            ({invoice_item_id, product_exp_id, quantity, product_name, product_detail_id, product_detail_name, product_detail_pic, price, exp_date})
                     )
                 });
             }

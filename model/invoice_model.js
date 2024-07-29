@@ -219,7 +219,7 @@ async function getInvoiceByUserId(userId){
 async function getInvoiceItemByInvoiceId(invoiceId){
     const query = `
         SELECT ii.*, i.*, pd.*,
-            c.customer_name, u.user_name, p.product_name, pd.price,
+            c.customer_name, u.user_name, p.product_name, pd.price,  pe.exp_date,
             COALESCE((SELECT SUM(amount_paid) FROM payments WHERE invoice_id = ii.invoice_id),0) AS total_payment 
         FROM invoice_item ii 
         JOIN invoice i ON ii.invoice_id = i.invoice_id
