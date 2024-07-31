@@ -81,7 +81,7 @@ async function addProductExp(productDetailId, expDate, quantity, productBarcode)
         // * Insert ke tabel product_transaction
         const queryTransaction = `
             INSERT INTO product_transaction(product_exp_id, transaction_type, quantity, note)
-            VALUES($1, 'Pemasukan', $2, 'Pemasukan Produk Baru')
+            VALUES($1, 'Tambah', $2, 'Pemasukan Produk Baru')
         `;
 
         const valuesTransaction = [result.rows[0].product_exp_id, result.rows[0].quantity];
@@ -132,7 +132,7 @@ async function deleteProductExp(productExpId, note){
         // * After success delete product_exp, insert into product_transaction
         const queryInsert = `
             INSERT INTO product_transaction(product_exp_id, transaction_type, quantity, note)
-            VALUES ($1, 'Pengeluaran', $2, $3)
+            VALUES ($1, 'Kurang', $2, $3)
         `;
 
         const valuesInsert = [productExpId, resultQuantity.rows[0].quantity, note];

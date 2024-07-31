@@ -82,7 +82,7 @@ async function addInvoice(customerId, invoiceType, totalPrice, userId, note){
         const queryInsertTransaction = `
             INSERT INTO product_transaction(product_exp_id, transaction_type, quantity, note)
                 SELECT
-                    product_exp_id, 'Penjualan', quantity, $1 
+                    product_exp_id, 'Kurang', quantity, $1 
                 FROM
                     invoice_item
                 WHERE invoice_id = $2
