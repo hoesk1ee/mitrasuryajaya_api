@@ -10,4 +10,7 @@ router.get('/get-reduce-product-transaction', productTransactionController.getRe
 
 // * Router endpoint to fetch product based on product_exp_id
 router.get('/get-product-transaction/:productExpId', productTransactionController.getTransactionByProductExpId);
+
+// * Router endpoint to fetch all list product
+router.get('/get-list-product', productTransactionController.getAllList);
 module.exports = router;

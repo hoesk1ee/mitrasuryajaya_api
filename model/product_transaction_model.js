@@ -85,8 +85,46 @@ async function getTransactionByProductExpId(productExpId){
     }
 };
 
+// * Read all list
+// async function getAllList(){
+//     const query = `
+//         SELECT category_id FROM category
+//     `;
+
+//     const result = await pool.query(query);
+
+//     const queryGet = `SELECT * FROM products WHERE category_id = $1`
+
+//     const valuesGet = [result.rows];
+//     console.log(result.rows);
+
+//     const resultGet = await pool.query(queryGet, valuesGet);
+//     console.log(result.rows.category_name);
+
+//     return {
+//         category_name : result.rows.category_name,
+//         product_name : resultGet.rows.product_name
+//     };
+// };
+async function getAllList(){
+    const query = `
+        SELECT 
+            c.category_name, p.product_name, pd.product_detail_id, pd.product_detail_name, pd.price,
+            pe.exp_date, pe.quantity, pe.product_barcode
+        FROM category c 
+        JOIN products p ON c.category_id = p.category_id
+        JOIN product_detail pd ON p.product_id = pd.product_id
+        JOIN product_exp pe ON pd.product_detail_id = pe.product_detail_id
+    `;
+
+    const result = await pool.query(query);
+
+    return result.rows;
+};
+
 module.exports = {
     getAddProductTransaction,
     getReduceProductTransaction,
-    getTransactionByProductExpId
+    getTransactionByProductExpId,
+    getAllList
 };

@@ -84,8 +84,39 @@ async function getTransactionByProductExpId(req,res){
     }
 };
 
+// * Controller to fetch all list
+async function getAllList(req,res){
+    try{
+        const list = await productTransactionModel.getAllList();
+
+        if(list.length == 0){
+            res.json({
+                success : false,
+                message : "Tidak ada daftar produk" 
+            });
+        }else{
+            res.json({
+                success : true,
+                message : "Berhasil menampilkan daftar produk",
+                category_list : list.map(({category_name, product_list}) => 
+                    ({category_name, product_list : list.map(({product_name, product_detail_list}) => 
+                        ({product_name, product_detail_list : list.map(({product_detail_name, price, product_exp_list}) => 
+                            ({product_detail_name, price, product_exp_list : list.map(({exp_date, quantity, product_barcode}) => ({exp_date, quantity, product_barcode}))
+                            }))
+                        })) 
+                    }))
+                // category_list : list.category_name
+
+            });
+        }
+    }catch(e){
+        res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
+    }
+};
+
 module.exports = {
     getAddProductTransaction,
     getReduceProductTransaction,
-    getTransactionByProductExpId
+    getTransactionByProductExpId,
+    getAllList
 };
