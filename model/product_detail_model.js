@@ -62,12 +62,13 @@ async function addProductDetail(productId, productDetailPic, productDetailName, 
 // * Delete product detail based on product_id and product_detail_id
 async function deleteProductDetail(productId, productDetailId){
     const query = `
-        DELETE FROM product_detail 
+        UPDATE product_detail SET is_deleted = true
 	    WHERE product_id = $1 AND product_detail_id = $2`;
     
         const values = [ productId, productDetailId];
 
-        await pool.query(query, values);
+        const result =await pool.query(query, values);
+        console.log(result.rowCount);
 }
 
 // * Update product detail pic and/or name based on product_id and product_detail_id
