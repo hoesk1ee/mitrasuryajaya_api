@@ -67,8 +67,7 @@ async function deleteProductDetail(productId, productDetailId){
     
         const values = [ productId, productDetailId];
 
-        const result =await pool.query(query, values);
-        console.log(result.rowCount);
+        await pool.query(query, values);
 }
 
 // * Update product detail pic and/or name based on product_id and product_detail_id
