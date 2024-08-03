@@ -12,7 +12,7 @@ async function getAllProductDetail(productId){
                 pd.product_detail_pic, pd.product_detail_name, pd.price
             FROM product_detail pd 
             JOIN products p ON pd.product_id = p.product_id
-            WHERE pd.product_id = $1
+            WHERE pd.product_id = $1 AND pd.is_deleted = false
         `;
 
         const values = [ productId ];
