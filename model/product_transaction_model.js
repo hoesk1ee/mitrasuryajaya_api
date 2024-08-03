@@ -68,6 +68,7 @@ async function getTransactionByProductExpId(productExpId){
             JOIN product_detail pd ON pe.product_detail_id = pd.product_detail_id
             JOIN products p ON pd.product_id = p.product_id
             WHERE pt.product_exp_id = $1
+            ORDER BY pt.transaction_date ASC
         `;
 
         const values = [productExpId];
@@ -85,27 +86,6 @@ async function getTransactionByProductExpId(productExpId){
     }
 };
 
-// * Read all list
-// async function getAllList(){
-//     const query = `
-//         SELECT category_id FROM category
-//     `;
-
-//     const result = await pool.query(query);
-
-//     const queryGet = `SELECT * FROM products WHERE category_id = $1`
-
-//     const valuesGet = [result.rows];
-//     console.log(result.rows);
-
-//     const resultGet = await pool.query(queryGet, valuesGet);
-//     console.log(result.rows.category_name);
-
-//     return {
-//         category_name : result.rows.category_name,
-//         product_name : resultGet.rows.product_name
-//     };
-// };
 async function getAllList(){
     const query = `
         SELECT 
