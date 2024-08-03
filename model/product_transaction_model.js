@@ -96,6 +96,8 @@ async function getProductList(){
             JOIN products p ON c.category_id = p.category_id
             JOIN product_detail pd ON p.product_id = pd.product_id
             JOIN product_exp pe ON pd.product_detail_id = pe.product_detail_id
+            WHERE c.is_deleted = false AND p.is_deleted = false AND pd.is_deleted = false
+            AND pe.is_deleted = false
             ORDER BY p.product_name
         `;
 
