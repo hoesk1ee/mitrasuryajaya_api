@@ -2,7 +2,7 @@ const pool = require('../db/index');
 
 // * Read all categories
 async function getAllCategories(){
-    const query = `SELECT * FROM category`;
+    const query = `SELECT * FROM category WHERE is_deleted = false`;
     const result = await pool.query(query);
 
     return result.rows;
