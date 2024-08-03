@@ -23,7 +23,7 @@ async function addCategory(categoryPic, categoryName){
 
 // * Delete category based on ID
 async function deleteCategory(categoryId){
-    const query = `DELETE FROM category WHERE category_id = $1`;
+    const query = `UPDATE category SET is_deleted = true WHERE category_id = $1`;
 
     const values = [categoryId];
 
