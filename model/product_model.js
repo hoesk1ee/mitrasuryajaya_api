@@ -7,9 +7,10 @@ async function getAllProduct(categoryId){
         await pool.query('BEGIN');
 
         const query = `
-            SELECT p.product_id, c.category_name, p.category_id, p.product_pic, p.product_name
+            SELECT 
+                p.product_id, c.category_name, p.category_id, p.product_pic, p.product_name
             FROM products p JOIN category c ON p.category_id = c.category_id
-            WHERE p.category_id = $1
+            WHERE p.category_id = $1 AND p.is_deleted = false
         `;
 
         const values = [categoryId];
