@@ -9,7 +9,7 @@ router.get('/:categoryId', productController.getAllProduct);
 router.post('/add-product', productController.addProduct);
 
 // * Route endpoint to delete product based product_id and category_id
-router.delete('/delete-product/:categoryId/:productId', productController.deleteProduct);
+router.post('/delete-product', productController.deleteProduct);
 
 // * Route endpoint to update pic and/or name product based on product_id and category_id
 router.put('/update-product', productController.updateProduct);
