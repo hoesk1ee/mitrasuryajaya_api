@@ -46,7 +46,7 @@ async function addProduct(req, res){
 // * Controller to delete product based on product id and category id
 async function deleteProduct(req,res){
     try{
-        const { productId, categoryId } = req.body;
+        const { productId, categoryId } = req.params;
 
         await productModel.deleteProduct(productId, categoryId);
 

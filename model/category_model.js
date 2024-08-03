@@ -27,8 +27,7 @@ async function deleteCategory(categoryId){
 
     const values = [categoryId];
 
-    const result = await pool.query(query, values);
-    console.log(result.rowCount);
+    await pool.query(query, values);
 };
 
 // * Update category based on ID 

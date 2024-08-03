@@ -59,7 +59,7 @@ async function addProduct(categoryId, productPic, productName){
 
 // * Delete product based on product id and category id
 async function deleteProduct(productId, categoryId){
-    const query = `DELETE FROM products WHERE product_id = $1 and category_id = $2`;
+    const query = `UPDATE products SET is_deleted = true WHERE product_id = $1 and category_id = $2`;
 
     const values = [ productId, categoryId];
 
