@@ -102,7 +102,21 @@ async function addTimelinePayment(invoiceId,amountPaid,note){
     }
 };
 
+// * Update Payment
+async function updatePayment(paymentId){
+    const query = `
+        UPDATE payments SET is_verified = true WHERE payment_id = $1
+    `;
+    
+    const values = [paymentId];
+
+   const result = await pool.query(query, values);
+
+   console.log(result.rowCount);
+};
+
 module.exports = {
     getPayment,
-    addTimelinePayment
+    addTimelinePayment,
+    updatePayment
 };
