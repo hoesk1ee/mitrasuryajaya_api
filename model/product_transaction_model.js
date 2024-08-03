@@ -86,25 +86,30 @@ async function getTransactionByProductExpId(productExpId){
     }
 };
 
-async function getAllList(){
-    const query = `
-        SELECT 
-            c.category_name, p.product_name, pd.product_detail_id, pd.product_detail_name, pd.price,
-            pe.exp_date, pe.quantity, pe.product_barcode
-        FROM category c 
-        JOIN products p ON c.category_id = p.category_id
-        JOIN product_detail pd ON p.product_id = pd.product_id
-        JOIN product_exp pe ON pd.product_detail_id = pe.product_detail_id
-    `;
+async function getProductList(){
+    try{
+        const query = `
+            SELECT 
+                c.category_name, p.product_name, pd.product_detail_name, pd.price,
+                pe.exp_date, pe.quantity, pe.product_barcode
+            FROM category c 
+            JOIN products p ON c.category_id = p.category_id
+            JOIN product_detail pd ON p.product_id = pd.product_id
+            JOIN product_exp pe ON pd.product_detail_id = pe.product_detail_id
+            ORDER BY p.product_name
+        `;
 
-    const result = await pool.query(query);
+        const result = await pool.query(query);
 
-    return result.rows;
+        return result.rows;
+    }catch(e){
+        throw e;
+    }
 };
 
 module.exports = {
     getAddProductTransaction,
     getReduceProductTransaction,
     getTransactionByProductExpId,
-    getAllList
+    getProductList
 };
