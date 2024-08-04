@@ -13,7 +13,7 @@ async function getPayment(invoiceId){
                 COALESCE((SELECT SUM(amount_paid) AS total_amount_paid FROM payments WHERE invoice_id = $1), 0) AS total_payment
             FROM payments p JOIN invoice i ON p.invoice_id = i.invoice_id
             JOIN customers c ON i.customer_id = c.customer_id
-            WHERE p.invoice_id = $2
+            WHERE p.invoice_id = $2 ORDER BY p.payment_date
         `;
         
         const values = [invoiceId, invoiceId];
