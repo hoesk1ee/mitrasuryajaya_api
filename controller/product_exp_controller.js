@@ -39,6 +39,7 @@ async function getAllProductExp(req,res){
             });
         }
     } catch(e){
+        console.error("Error : ", e);
         res.status(500).json({ success : false, message : `Internal Server Error : ${e}`});
     }
 };
