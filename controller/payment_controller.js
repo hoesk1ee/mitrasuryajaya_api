@@ -32,8 +32,8 @@ async function getPayment(req,res){
                 total_payment : payment[0].total_payment,
                 customer_name : payment[0].customer_name,
                 customer_phone : payment[0].customer_phone,
-                timeline : payment.map(({payment_date, amount_paid, note, is_verified}) => 
-                    ({payment_date : moment(payment_date).locale('id').format('DD MMMM YYYY HH:mm'), 
+                timeline : payment.map(({payment_id, payment_date, amount_paid, note, is_verified}) => 
+                    ({payment_id, payment_date : moment(payment_date).locale('id').format('DD MMMM YYYY HH:mm'), 
                         amount_paid, note, is_verified}))
             });
         }

@@ -8,7 +8,7 @@ async function getPayment(invoiceId){
 
         const query = `
             SELECT 
-                p.invoice_id, i.invoice_date, i.due_date, i.total_price, p.payment_date, p.amount_paid, p.note, p.is_verified,
+                p.invoice_id, i.invoice_date, i.due_date, i.total_price, p.payment_id, p.payment_date, p.amount_paid, p.note, p.is_verified,
                 c.customer_phone, c.customer_name, 
                 COALESCE((SELECT SUM(amount_paid) AS total_amount_paid FROM payments WHERE invoice_id = $1), 0) AS total_payment
             FROM payments p JOIN invoice i ON p.invoice_id = i.invoice_id
@@ -110,9 +110,7 @@ async function updatePayment(paymentId){
     
     const values = [paymentId];
 
-   const result = await pool.query(query, values);
-
-   console.log(result.rowCount);
+   await pool.query(query, values);
 };
 
 module.exports = {
