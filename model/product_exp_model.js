@@ -12,7 +12,7 @@ async function getAllProductExp(productDetailId){
             FROM product_exp pe 
             JOIN product_detail pd ON pe.product_detail_id = pd.product_detail_id
             JOIN products p ON pd.product_id = p.product_id
-            WHERE pe.product_detail_id = $1 AND is_deleted = false
+            WHERE pe.product_detail_id = $1 AND pe.is_deleted = false
         `;
 
         const values = [productDetailId];
