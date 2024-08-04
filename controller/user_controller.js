@@ -59,7 +59,7 @@ async function createUser(req, res){
         let { userId, photoUrl, userRole, userName, phoneNumber, email } = req.body;
 
         if(photoUrl == null){
-            photoUrl = 'https://firebasestorage.googleapis.com/v0/b/mitra-surya-jaya.appspot.com/o/user.png?alt=media&token=6c53cb9c-975a-48ff-8d1a-da3ca2dc6dc6';
+            photoUrl = 'https://firebasestorage.googleapis.com/v0/b/mitra-surya-jaya.appspot.com/o/user.png?alt=media&token=f005345b-2aba-4864-a25e-933bdd214a30';
 
             await userModel.createUser(userId, photoUrl, userRole, userName, phoneNumber, email);
         }else{
