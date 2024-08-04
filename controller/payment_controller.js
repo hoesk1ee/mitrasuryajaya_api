@@ -62,7 +62,21 @@ async function addTimelinePayment(req,res){
     }
 };
 
+// * Controller to update paymnet based on payment_id
+async function updatePayment(req,res){
+    try{
+        const { paymentId } = req.body;
+
+        await paymentModel.updatePayment(paymentId);
+        res.status(201).json({ success : true, message : "Pembayaran berhasil di verifikasi!"});
+    }catch(e){
+        console.error("Error : ", e);
+        res.status(500).json({ success : false, message : "Pembayaran tidak berhasil diverifikasi"});
+    }
+};
+
 module.exports = {
     getPayment,
-    addTimelinePayment
+    addTimelinePayment,
+    updatePayment
 };

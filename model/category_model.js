@@ -2,7 +2,7 @@ const pool = require('../db/index');
 
 // * Read all categories
 async function getAllCategories(){
-    const query = `SELECT * FROM category`;
+    const query = `SELECT * FROM category WHERE is_deleted = false`;
     const result = await pool.query(query);
 
     return result.rows;
@@ -23,7 +23,7 @@ async function addCategory(categoryPic, categoryName){
 
 // * Delete category based on ID
 async function deleteCategory(categoryId){
-    const query = `DELETE FROM category WHERE category_id = $1`;
+    const query = `UPDATE category SET is_deleted = true WHERE category_id = $1`;
 
     const values = [categoryId];
 

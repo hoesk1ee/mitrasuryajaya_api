@@ -12,7 +12,7 @@ async function getAllProductDetail(productId){
                 pd.product_detail_pic, pd.product_detail_name, pd.price
             FROM product_detail pd 
             JOIN products p ON pd.product_id = p.product_id
-            WHERE pd.product_id = $1
+            WHERE pd.product_id = $1 AND pd.is_deleted = false
         `;
 
         const values = [ productId ];
@@ -62,7 +62,7 @@ async function addProductDetail(productId, productDetailPic, productDetailName, 
 // * Delete product detail based on product_id and product_detail_id
 async function deleteProductDetail(productId, productDetailId){
     const query = `
-        DELETE FROM product_detail 
+        UPDATE product_detail SET is_deleted = true
 	    WHERE product_id = $1 AND product_detail_id = $2`;
     
         const values = [ productId, productDetailId];

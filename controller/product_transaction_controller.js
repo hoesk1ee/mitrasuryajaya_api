@@ -84,8 +84,70 @@ async function getTransactionByProductExpId(req,res){
     }
 };
 
+// * Controller to fetch all  product list
+async function getProductList(req,res){
+    try{
+        const allProductList = await productTransactionModel.getProductList();
+
+        const data = {};
+
+        allProductList.forEach(row => { 
+            if(!data[row.category_name])
+            {
+                data[row.category_name] = {};
+            }
+
+            if(!data[row.category_name][row.product_name]){
+                data[row.category_name][row.product_name] = [];
+            }
+
+            const productDetail = {
+                product_detail_name : row.product_detail_name,
+                price : row.price,
+                product_exp_list : [],
+            };
+
+            const productExp = {
+                exp_date : row.exp_date,
+                quantity : row.quantity,
+                product_barcode : row.product_barcode,
+            };
+
+            let existingDetail = data[row.category_name][row.product_name].find(
+                detail => detail.product_detail_name === row.product_detail_name
+            );
+
+            if(existingDetail){
+                existingDetail.product_exp_list.push(productExp);
+            }else{
+                productDetail.product_exp_list.push(productExp);
+                data[row.category_name][row.product_name].push(productDetail);
+            }
+
+        });
+
+        const response = {
+            success : true,
+            message : "Berhasil menampilkan seluruh daftar produk tersedia!",
+            category_list : Object.keys(data).map(category_name => ({
+                category_name,
+                product_list : Object.keys(data[category_name]).map(product_name => ({
+                    product_name,
+                    product_detail_list : data[category_name][product_name],
+                })),
+            })),
+        };
+
+        res.json(response);
+    }catch(e){
+        console.error("Error : ", e);
+        res.status(500).json({ success : false, message : "Gagal menampilkan daftar data!" });
+    }
+};
+
 module.exports = {
     getAddProductTransaction,
     getReduceProductTransaction,
-    getTransactionByProductExpId
+    getTransactionByProductExpId,
+    getProductList
 };
