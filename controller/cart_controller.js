@@ -40,7 +40,7 @@ async function addCart(req,res){
         if(carts === false){
             res.json({
                 success : false,
-                message : "Product Barcode tidak ditemukan!"
+                message : "Tidak berhasil menambahkan cart!"
             });
         }else{
             res.status(201).json({ 

@@ -29,7 +29,7 @@ async function addCart(userId, productBarcode){
         // * Ambil nilai product barcode di product_exp
         const queryCekBarcode = `
             SELECT 
-                product_barcode FROM product_exp
+                product_barcode, quantity AS product_quantity FROM product_exp
             WHERE product_barcode = $1
         `;
 
@@ -37,8 +37,8 @@ async function addCart(userId, productBarcode){
 
         const resultCekBarcode = await pool.query(queryCekBarcode, valuesCekBarcode);
 
-        // * Cek apakah produck barcode ada atau tidak
-        if(resultCekBarcode.rowCount === 0){
+        // * Cek apakah product barcode atau product_quantity ada atau tidak
+        if(resultCekBarcode.rowCount === 0 || resultCekBarcode.rows[0].product_quantity <= 0){
             return false
         }
         
