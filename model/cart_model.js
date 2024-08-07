@@ -3,8 +3,9 @@ const pool = require('../db/index');
 // * Read All Cart
 async function getAllCart(userId){
     const query = `
-        SELECT c.cart_id, c.user_id, c.product_exp_id, p.product_name, pd.product_detail_pic,
-        pd.product_detail_name, pd.price, c.quantity, pe.exp_date
+        SELECT 
+            c.cart_id, c.user_id, c.product_exp_id, p.product_name, pd.product_detail_pic,
+            pd.product_detail_name, pd.price, c.quantity, pe.exp_date, pe.quantity AS product_quantity
         FROM cart c 
         JOIN product_exp pe ON c.product_exp_id = pe.product_exp_id
         JOIN product_detail pd ON pe.product_detail_id = pd.product_detail_id

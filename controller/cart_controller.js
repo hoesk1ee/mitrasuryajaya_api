@@ -20,8 +20,8 @@ async function getAllCart(req,res){
                 message : "Berhasil dapat data cart!",
                 user_id : carts[0].user_id,
                 carts : carts.map(
-                    ({cart_id, product_exp_id, product_name, product_detail_pic, product_detail_name, price, quantity, exp_date}) =>
-                        ({cart_id, product_exp_id, product_name, product_detail_pic, product_detail_name, price, quantity, exp_date : moment(exp_date).locale('id').format('DD MMMM YYYY')})
+                    ({cart_id, product_exp_id, product_name, product_detail_pic, product_detail_name, price, quantity, exp_date, product_quantity}) =>
+                        ({cart_id, product_exp_id, product_name, product_detail_pic, product_detail_name, price, quantity, exp_date : moment(exp_date).locale('id').format('DD MMMM YYYY'), product_quantity})
                 )
             });
         }
